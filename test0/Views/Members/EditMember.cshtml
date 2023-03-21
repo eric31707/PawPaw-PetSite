@@ -1,0 +1,126 @@
+﻿@section Styles{
+
+}
+
+<div class="col-3"></div>
+<form>
+	<div class="container col-6 mt-4 mb-4" style="" id="app">
+		<div style="height:70px"></div>
+		<div class="card " style="border-radius:20px">
+			<div class="card-body">
+				<h2 class="mb-2 text-center m-3">註冊會員</h2>
+
+				<div class="mb-3">
+					<label for="userName" class="form-label">姓名</label>
+					<input type="text"
+						   class="form-control"
+						   id="userName"
+						   name="username"
+						   placeholder="請輸入姓名"
+						   v-model="userName"
+						   autofocus
+						   required />
+				</div>
+											
+				<div class="mb-3">
+					<label for="mobile" class="form-label">手機號碼</label>
+					<input type="text"
+						   class="form-control"
+						   id="mobile"
+						   name="mobile"
+						   placeholder="請輸入手機號碼"
+						   v-model="mobile"
+						   autofocus />
+				</div>
+				<label for="html5-date-input" class="col-form-label">生日</label>
+				<div class="mb-3">                       
+                        <div class="">
+                          <input class="form-control" type="date"  id="html5-date-input" v-model="birthDate"/>
+                        </div>
+				</div>
+				<div class="mb-3">
+					<label for="address" class="form-label">地址</label>
+					<input type="text"
+						   class="form-control"
+						   id="address"
+						   name="address"
+						   placeholder="請輸入地址"
+						   autofocus
+						   v-model="address" />
+				</div>
+
+				<br />
+				<div class="mb-3 " v-on:mouseenter="">
+					<button class="btn btn-primary  w-100" id="submit" @@click="editProfile">修改</button>
+				</div>
+				<br />
+
+				<ul>
+					<li v-for="error in errors" class="text-danger">{{error}}</li>
+				</ul>
+
+				<br />
+				<p class="text-center">
+					<span>還沒有會員嗎?</span>
+					<a href="auth-register-basic.html">
+						<span>註冊新帳號</span>
+					</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</form>
+<div class="col-3"></div>
+@section Scripts{
+	<script>
+		
+		$.fn.datepicker.defaults.format = "yyyy/mm/dd";
+		//$('#datetimepicker').datetimepicker({
+		//    format: "YYYY/MM/DD",
+		//    defaultDate:new Date()
+		//});
+		var webApiBaseAddr = "https://localhost:7150"
+		var vueApp = {
+			data() {
+				return {
+					userName: "",
+					mobile: "",
+					address: "",
+					birthDate: "",
+					errors: [],
+				};
+			},
+			mounted: function () {
+				let _this = this;
+				_this.getMember();
+			},
+			methods: {
+				getMember: function () {
+				
+					axios.get(`${webApiBaseAddr}/api/members/GetMember`,{withCredentials:true,}).then(response => {
+						let _this = this;
+						member = response.data;						
+						_this.userName = member.name;
+						_this.mobile = member.mobile;
+						_this.birthDate = member.birthDate;
+						_this.address = member.address;
+					
+					})
+				},								
+				editProfile:function(){
+						let _this = this;
+						var editMember = {};
+						editMember.name = _this.userName;
+						editMember.mobile = _this.mobile;
+						editMember.birthDate = _this.birthDate;
+						editMember.address = _this.address;
+					axios.post(`${webApiBaseAddr}/api/members/EditProfile`,editMember,{ withCredentials: true, }).then(response => {
+						alert(response.data);
+					})
+				}
+			},
+			Credential:"include",
+		}
+		var app = Vue.createApp(vueApp).mount("#app");
+	</script>
+}

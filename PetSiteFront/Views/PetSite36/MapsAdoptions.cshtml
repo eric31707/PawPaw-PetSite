@@ -1,0 +1,100 @@
+﻿
+@*<aside>
+    <div style="background-color:yellowgreen">aside</div>
+</aside>*@
+<div id="app">
+    <div>
+
+    </div>
+</div>
+<div style="display:flex;">
+    <div id="map" style="width:50% ; height:100vh;"></div>
+   
+    
+</div>
+@*<div style="background-color:aqua">123</div>*@
+
+
+
+@section Scripts
+{
+    @*<script src="https://code.jquery.com/jquery-3.6.3.min.js" ></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript"
+        src="http://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false">
+        </script>*@
+    @* <script>
+        let map;
+        let currentPosition;
+        function initMap(){
+        map=new google.maps.Map(document.getElementById("map"),{
+        center:{lat:23.553118,lng:121.0211024},
+        zoom:7,
+        });
+
+        navigator.geolocation.getCurrentPosition(function (position) {
+        currentPosition = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        };
+        map.setCenter(currentPosition);
+        map.setZoom(16);
+        });
+        }
+        window.initMap = initMap;
+        </script>*@
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+    <script>
+        const googleMap = new Vue({
+            el: '#app',
+            data: {
+                map: null,
+                locationDTO:[],
+            },
+            methods: {
+                // init google map
+                initMap() {
+
+                    // 預設顯示的地點：台北市政府親子劇場
+                    let location = {
+                        lat: 23.553118, lng: 121.0211024
+                        //lat: 25.0374865, // 經度
+                        //lng: 121.5647688 // 緯度
+                    };
+
+                    // 建立地圖
+                    this.map = new google.maps.Map(document.getElementById('map'), {
+                        center: location, // 中心點座標
+                        zoom: 8, // 1-20，數字愈大，地圖愈細：1是世界地圖，20就會到街道
+                        /*
+                          roadmap 顯示默認道路地圖視圖。
+                          satellite 顯示 Google 地球衛星圖像。
+                          hybrid 顯示正常和衛星視圖的混合。
+                          terrain 顯示基於地形信息的物理地圖。
+                        */
+                        mapTypeId: 'terrain'
+                    });
+
+                    // 放置marker
+                    let marker = new google.maps.Marker({
+                        position: location,
+                        map: this.map
+                    });
+
+                }
+            },
+            created() {
+                window.addEventListener('load', () => {
+                    this.initMap();
+                });
+            }
+        });
+        
+    </script>
+ 
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ9h5Mb7s_VQnjRkWrYB1vOu6gnLyci60&libraries=places&callback=initMap">
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+}

@@ -1,0 +1,202 @@
+﻿<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+	  integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"
+		integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+@section Styles
+	{
+	<style>
+		.star::before {
+			content: "*";
+			color: red
+		}
+
+		.badge {
+			background-color: gray;
+		}
+	</style>
+}
+
+<button class="btn btn-danger" id="test">測試ckeditor</button>
+
+<button class="btn btn-danger" id="addDate">新增日期</button>
+<div class="d-flex justify-content-center row mt-5 mb-5">
+
+	<div class="card shadow-lg col-11 col-sm-10 col-md-9 col-lg-8 col-xl-8">
+		<div class="card-header">
+			<h2 class="text-center mt-2">新增活動</h2>
+		</div>
+
+		<!-- control -->
+
+		<div class="mb-3 ms-5 me-5">
+			<label for="Title" class="form-label mt-1 star">1.活動標題</label>
+			<input type="text" class="form-control" id="Title" placeholder="請輸入活動標題">
+		</div>
+
+		<div class="mb-3 ms-5 me-5">
+			<label for="formFile" class="form-label mt-1 star">2.活動類型</label>
+			<select id="EventsCategoryName" class="form-select" aria-label="Default select example">
+				<option selected value="狗">狗</option>
+				<option value="貓">貓</option>
+			</select>
+		</div>
+
+		<hr>
+
+		<div class="mb-3 ms-5 me-5">
+			<label for="formFile" class="form-label mt-1 star">3.報名開始日期</label>
+			<input id="ApplyTimeStart" type="datetime-local">
+		</div>
+
+		<div class="mb-3 ms-5 me-5">
+			<label for="formFile" class="form-label mt-1 star">4.報名截止日期</label>
+			<input id="ApplyTimeEnd" type="datetime-local">
+		</div>
+
+		<div class="mb-3 ms-5 me-5">
+			<label for="formFile" class="form-label mt-1 star">5.活動起始時間</label>
+			<input id="ProgressTimeStart" type="datetime-local">
+		</div>
+
+		<div class="mb-3 ms-5 me-5">
+			<label for="formFile" class="form-label mt-1 star">6.活動結束時間</label>
+			<input id="ProgressTimeEnd" type="datetime-local">
+		</div>
+
+		<hr>
+
+		<div class="mb-3 ms-5 me-5">
+			<label for="Image" class="form-label mt-1 star">7.上傳封面照片</label>
+			<input class="form-control" type="file" id="Image">
+		</div>
+		<img src="" id="preview">
+		<hr>
+
+		<div class="mb-3 ms-5 me-5">
+			<label for="Location" class="form-label mt-1 star">8.地點</label>
+			<input type="text" class="form-control" id="Location" placeholder="地點">
+		</div>
+
+		<div class="mb-3 ms-5 me-5">
+			<label for="ApplicantLimitedQTY" class="form-label mt-1 star">9.人數上限</label>
+			<input type="number" class="form-control" id="ApplicantLimitedQTY" placeholder="人數上限">
+		</div>
+
+		<div class="mb-3 ms-5 me-5">
+			<label for="EventInfo" class="form-label mt-1 star">10.活動詳情</label>
+			<textarea id="editor"></textarea>
+		</div>
+
+		<hr>
+
+		<div class="mb-3 ms-3 me-3 d-flex justify-content-center">
+			<button id="Sumbits" class="btn btn-success">確認送出</button>
+		</div>
+
+	</div>
+
+</div>
+
+@section Scripts{
+
+	<script>
+
+		//圖片預覽用的
+		const fileInput = document.getElementById('Image');
+		const preview = document.getElementById('preview');
+
+		fileInput.addEventListener('change', function () {
+			const file = fileInput.files[0];
+
+			// 使用FileReader讀取文件
+			const reader = new FileReader();
+			reader.onload = function () {
+				preview.src = reader.result;
+			};
+			reader.readAsDataURL(file);
+		});
+
+		//初始化CKediotr5
+		ClassicEditor
+			.create(document.querySelector('#editor'), {
+			})
+			.then(editor => {
+				window.editor = editor;
+			})
+			.catch(error => {
+				console.error(error);
+			});
+
+		$('#test').click(function () {
+			console.log(window.editor.getData());
+		});
+
+		$('#addDate').click(function () {
+			var isoDateTimeString = "2023-03-16T12:34:56.789Z";
+			$('#ApplyTimeStart').val("2023-03-16 13:00");
+			$('#ApplyTimeEnd').val("2023-04-16 13:00");
+			$('#ProgressTimeStart').val("2023-05-16 13:00");
+			$('#ProgressTimeEnd').val("2023-05-16 20:00");
+			$('#Title').val("免費毛寵茶會，享受健康飲品茶點");
+			$('#Location').val("桃園市中壢區");
+			$('#ApplicantLimitedQTY').val("20");
+		});
+
+		//jquery送出ajax活動表單資料
+		$("#Sumbits").click(function () {
+			var data = new FormData();
+
+			data.append("Title", $("#Title").val());
+			data.append("Image", $("#Image")[0].files[0]);
+			data.append("EventsCategoryName", $("#EventsCategoryName").val());
+			data.append("ApplyTimeStart", $("#ApplyTimeStart").val());
+			data.append("ApplyTimeEnd", $("#ApplyTimeEnd").val());
+			data.append("ProgressTimeStart", $("#ProgressTimeStart").val());
+			data.append("ProgressTimeEnd", $("#ProgressTimeEnd").val());
+			data.append("Location", $("#Location").val());
+			data.append("ApplicantLimitedQTY", $("#ApplicantLimitedQTY").val());
+			data.append("EventInfo", window.editor.getData());
+
+			//欄位驗證(有無填寫)
+			let errorString = "";
+			let errorBool = false;
+			let errorName = ['活動標題', '活動類型', '報名開始日期', '報名截止日期', '活動起始時間', '活動結束時間', '上傳封面照片', '地點', '人數上限', '活動詳情'];
+			let errorindex = 0;
+			for (var pair of data.entries()) {
+				if (pair[1] === '' || pair[1] === 'undefined') {
+					console.log(pair[0] + ": " + pair[1]);
+					errorString += `${errorName[errorindex]}沒填\n`
+					errorBool = true;
+				}
+				errorindex++;
+			}
+			console.log(errorBool)
+			if (errorBool == true) {
+				alert(errorString);
+				return;
+			}
+			$.ajax({
+				type: "POST",
+				url: "https://localhost:7150/api/Events",
+				contentType: false,
+				processData: false,
+				data: data,
+				dataType: 'json',
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function (data) {
+					alert(data.name);
+					window.location.assign("https://localhost:7180/Event/eventcenter");//跳轉個人活動中心
+				},
+				error: function () {
+					console.log("失敗");
+				},
+
+			});
+		});
+	</script>
+
+
+}

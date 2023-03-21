@@ -1,0 +1,360 @@
+﻿@section Styles
+    {
+         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <style>
+
+        .btnscroll {
+            position: fixed;
+            bottom: 60px;
+            right: 60px;
+        }
+        html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+.blocks {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(12, 12, 12, 0.486);
+
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.blocksShow {
+    display: flex;
+}
+
+.area {
+    width: 90%;
+    height: 90%;
+    background-color: #fff;
+    display: flex;
+}
+
+.area .img {
+    position: relative;
+    width: 500px;
+}
+
+.area .img img {
+    width: 100%;
+}
+
+
+.area .descd {
+    width: calc(100% - 500px);
+}
+
+.selectplaces {
+    padding: 20px;
+}
+
+.places {
+    /* background-color: burlywood; */
+    margin: 20px;
+    display: inline-flex;
+    padding: 20px;
+}
+
+.places:hover {
+    background-color: cadetblue;
+}
+
+.places .sn {
+    width: 50px;
+}
+
+/* .places .kind {
+    width: calc(100% - 50px - 120px);
+}
+
+.places .place {
+    width: 120px;
+}*/
+
+.h620px {
+    height: 620px;
+}
+
+.h200px {
+    height: 600px;
+}
+
+
+
+.car1 img {
+    transition: all 0.2s;
+}
+
+.card1:hover img {
+    transform: scale(1.1);
+}
+
+.fz40 {
+    font-size: 40px;
+}
+
+.z1 {
+    z-index: 1;
+}
+
+.cursor-pointer {
+    /* 手指符號 */
+    cursor: pointer;
+}
+
+.object-fit-contain {
+    object-fit: contain;
+}
+    </style>
+}
+<div class=" container  mt-5">
+        <div class="card row p-0" style="width:700px; height: 200px;display:flex;justify-content:center; align-items: center; margin:auto;">
+            <div class=" col-4 m-1">
+                物種：
+                <select class="form-control" style="width:200px;">
+                    <option value="">請選擇</option>
+                    <option value="狗">狗</option>
+                    <option value="貓">貓</option>
+                </select>
+                花色：<input class="form-control" id="color" />
+            </div>
+            <div class="col-6 mb-3 mt-3">
+                性別：
+                <select class="form-control" style="width:200px;">
+                    <option value="">請選擇</option>
+                    <option value="M">公</option>
+                    <option value="F">母</option>
+                    <option value="N">未知</option>
+                </select>
+                <button class="btn btn-info  mt-4" style="width:100px;margin-left: 200px;">查詢</button>
+
+            </div>
+             </div>
+    <div class="selectplaces row row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5"
+         style="display:flex;justify-content:center; align-items: center; margin:auto;">
+
+            
+     </div>
+        <div class="blocks form-control">
+            <div class="area form-control row">
+            <div class="img col-5">
+                <img src="${圖片}" alt="">
+            </div>
+            <div class="content col-7">
+                <table>
+                    <tr>
+                        <td class ="place" style="font-size:35px;">
+                              ${animal_place}
+                        </td>    
+                    </tr>
+                    <tr>
+                            <td class="kind">
+                                ${動物種類}
+                            </td>
+                    </tr>
+                    <tr>
+                            <td class="sex">
+                                ${動物性別}
+                            </td>
+                    </tr>
+                    <tr>
+                            <td class="animcolor">
+                                ${color}
+                            </td>
+                    </tr>
+                        <tr>
+                            <td class="bodytype">
+                                ${bodytype}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="animVariety">
+                                ${animVariety}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="add">
+                                ${add}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="shelterphone">
+                                ${shelterphone}
+                            </td>
+                        </tr>
+                </table>
+                    @*<h2 class="place">${animal_place}</h2>
+                <h3 class="kind">${動物種類}</h3>
+                <h3 class="sex">${動物性別}</h3>*@
+
+                    <div class="descd">
+                    <!-- 縣市 -->
+                    @*<p class="areaId"> ${animal_area_pkid}</p>
+                    <p class="shelterId">${animal_shelter_pkid}</p>*@
+                    <p class="animcolor">${animal_colour}</p>
+                    <p class="bodytype">${animal_bodytype}</p>
+                    <p class="animVariety">${animal_Variety</p>
+                    <p class="add">${shelter_address}</p>
+                    <p class="shelterphone">${shelter_tel}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="btn btnscroll" style=" background-color: #fff; border: 1px solid #c7c7c7;">
+            <i class="fa-solid fa-chevron-up"></i>
+
+        </div>
+</div>
+
+@section Scripts{
+        <script>
+
+        let bodyHeight = $("body").height();
+        let winheight = $(window).height();
+        $(window).scroll(function () {
+            let scrollNowTop = $(this).scrollTop();//目前scroll的距離上方的位置
+            let scrollpercent =
+                Math.round(scrollNowTop / ((bodyHeight - winheight)) * 100) + "%";
+            $(".progress-percent").css("width", scrollpercent);
+            //把.progress-percent樣式css加上width的百分比
+        })
+        //頁面滑到最上面
+        $(".btnscroll").click(function () {
+            $("html,body").animate({
+                scrollTop: 0,
+            }
+                , 900
+            )
+        });
+
+        getAll();
+        const blocks = document.querySelector(".blocks");
+        blocks.addEventListener("click", function (e) {
+            blocks.classList.remove('blocksShow');
+        });
+
+        function setList(data) {
+            let htmlString = "";
+            for (let i = 0; i < 100; i++) {
+                let template = `
+                                    <div class="places card card1 mt-5 cursor-pointer m-1" id="${i}" >
+                                                        <img src="${data[i].album_file}" style="height:200px" onerror="this.src='https://i.pinimg.com/originals/18/82/e0/1882e07aecdf7a3286a5013cdad5d0c0.png'" alt=""  class=" card-img-top d-block object-fit-contain m-0 p-0">
+                                <div class="card-header d-flex  border-bottom-0 mt-2 ">
+                                     <span class="sn ">${i + 1}</span>
+                                     <span class="badge   me-1 " style="background-color:rgb(210, 210, 210); font-size:16px;color:darkblue;">${data[i].animal_kind}</span>
+                                     <span class="badge   me-1" style="background-color:rgba(202, 154, 68, 1);font-size:16px;color:darkblue;">${data[i].animal_Variety}</span>
+                                     <span class="badge  me-1 bg-light" style="font-size:16px; color:darkblue;">${data[i].animal_colour}</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="kind"></div>
+                                    <div class="place " ><img class="mb-1" style="height:15px" src="data:image/png;base64,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"></i> ${data[i].animal_place}</div>
+                                </div>
+                            </div>`
+                htmlString += template;
+            }
+            const selectplaces = document.querySelector(".selectplaces");
+            selectplaces.innerHTML = htmlString
+            setBlockClick();
+        }
+        function setBlocks(data) {
+
+            const bigH1 = document.querySelector(".blocks .content .place");
+            const bigH2 = document.querySelector(".blocks .content .kind");
+            const bigH3 = document.querySelector(".blocks .content  .sex ");
+            const bigImg = document.querySelector(".blocks .img img");
+            const bigColor = document.querySelector(".blocks .animcolor");
+            const bigType = document.querySelector(".blocks .bodytype");
+            const bigVariety = document.querySelector(".blocks .animVariety");
+            const address = document.querySelector(".blocks .descd .add");
+            const shelterphone = document.querySelector(".blocks .descd .shelterphone")
+            bigH1.innerHTML = data.animal_place;
+            bigH2.innerHTML = data.animal_kind;
+            bigH3.innerHTML = data.animal_sex;
+            bigColor.innerHTML = data.animal_colour;
+            address.innerHTML = data.shelter_address;
+            bigType.innerHTML = data.animal_bodytype;
+            bigImg.src = data.album_file;
+            bigVariety.innerHTML = data.animal_Variety;
+            shelterphone.innerHTML = data.shelter_tel;
+            blocks.classList.add('blocksShow');
+        }
+        function getAll() {
+            //let url = "https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL";
+            //let params = {};
+            //params.method = "GET";
+            //fetch(url, params)
+            //    .then(function (response) {
+            //        return response.json();
+            //    })
+            //    .then(function (result) {
+            //        setList(result);
+            //        setSexName(result);
+            //    })
+            //    .catch(function (error) {
+            //        console.log(error);
+            //    });
+            console.log(123);
+            fetch('/images/TransService.json',{
+            credentials: 'include',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setList(data);
+                });
+        }
+
+        function getOne(id) {
+
+            
+            ///*https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL*/
+            //./TransService.json
+            let URL = `https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL`;
+            let params = {};
+            params.method = "GET";
+            fetch(URL, params)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (result) {
+                    return setBlocks(result[id]);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+        function setSexName(data){
+            for (var i = 0; i < data.length; i++) {
+                // 如果符合條件，則將"animal_sex"屬性的值從"M"改為"公"
+                if (data[i].animal_sex === "M") {
+                    data[i].animal_sex = "公";
+                }
+            }
+        }
+        function setBlockClick() {
+            const placesItems = document.querySelectorAll(".places");
+            placesItems.forEach(item => {
+                item.addEventListener("click", function (e) {
+                    const id = this.getAttribute('id');
+                    getOne(id);
+                    console.log(id);
+                    //selectplaces.classList.add("bigShow");
+                });
+            })
+        }
+        </script>
+           
+   
+    @*<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    *@
+}
+

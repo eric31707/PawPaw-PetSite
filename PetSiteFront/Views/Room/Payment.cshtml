@@ -1,0 +1,460 @@
+﻿@using PetSiteAPI.Models.VM;
+@model PaymentVM;
+
+<div class="header">
+	<div class="header-inner">
+		<img class="logo" src="https://dl.dropbox.com/s/7umwat48oy7usvs/Reconnect%20Logo.svg?dl=0">
+		<div class="menu">PAYMENT TYPES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOGOUT</div>
+	</div>
+
+</div>
+<div class="heading">
+	<label class="base-label margin-40" style="font-size:24px;">基本資料</label>
+
+	<div class="grid-container">
+		<div class="label-cell label-cell-left Label-1"><label class="base-label">姓名</label></div>
+		<div class="label-cell  Text-1"><p class="order-details" id="memberName">@Model.MemberName</p></div>
+		<div class="label-cell label-cell-left Label-2"><label class="base-label">Email</label></div>
+		<div class="label-cell Text-2"><p class="order-details" id="memberEmail">@Model.MemberEmail</p></div>
+		<div class="label-cell label-cell-left Label-3"><label class="base-label">手機號碼</label></div>
+		<div class="label-cell Text-3"><p class="order-details" id="memberMobile">@Model.Mobile</p></div>
+	</div>
+
+	<label class="base-label margin-40" style="font-size:24px;">訂單明細</label>
+	<ul class=leaders>
+		<li class="margin-20">
+			<p>&nbsp</p>
+			<p id="roomName">@Model.RoomName</p>
+			<p id="roomAddress">@Model.RoomAddress</p>
+			<p id="startDate">@Model.StartDate.ToString("yyyy/MM/dd")</p>
+			<p id="endDate">@Model.EndDate.ToString("yyyy/MM/dd")</p>
+			<p>@Model.RoomFee.ToString("0") 元 x @Model.Days 天</p>
+		</li>
+		<li class="margin-40">
+			<strong>
+				<span style="font-size:20px;">總價</span>
+				<span id="roomTotal" style="font-size:20px;">@Model.Total.ToString("0") 元</span>
+			</strong>
+		</li>
+	</ul>
+	<div class="col-6">
+		<label class="btn btn-success" style="padding-left:56px;padding-right:56px;" data-bs-toggle="modal" data-bs-target="#exampleModal" id="paymodal">
+			<i class="fa fa-circle-o fa-fw"></i>折扣代碼
+		</label>
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="ml-auto">
+						<button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+					</div>
+					<div class="modal-body">
+						<h2 style="font-weight: bolder">輸入折扣碼</h2>
+						<form>
+							<input type="text" class="form-control mb-2" placeholder="請輸入折扣碼" id="couponCode">
+							<button type="button" class="btn btn-success pull-right" id="checkCoupon">送出 </button>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<h3 class="margin-40">付款</h3>
+</div>
+<div class="margin-40">
+	<div class="card" style="margin-top:20px">
+		@*  <label class="base-label">Name</label>
+		<input class="base-input" id="_905815077" type="text" name="client_id" placeholder="" value="">
+		<label class="base-label">Card Number</label>
+		<input class="base-input input-cc-icon" id="_905815077" type="text" name="client_id" placeholder="" value="">
+		<label class="base-label">Expiration</label>
+		<input class="base-input" id="_905815077" type="text" name="client_id" placeholder="" value="">
+		<label class="base-label">CVC</label>
+		<input class="base-input" id="_905815077" type="text" name="client_id" placeholder="" value="">*@
+		<button id="paybtn" class="button">Pay Now</button>
+	</div>
+</div>
+
+@section Styles
+	{
+
+	<style>
+		body {
+			background: #ecf0f9;
+			color: #2f3d49;
+			font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+			font-size: 1.1rem;
+			font-weight: 400;
+			margin: 0;
+			padding: 0;
+		}
+
+		a {
+			color: #adc7cb;
+			text-decoration: none;
+		}
+
+			a:hover {
+				text-decoration: underline;
+			}
+
+		.header {
+			background: #fff;
+			height: 90px;
+			margin: 0;
+			padding: 0;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+		}
+
+		.header-inner {
+			margin: auto;
+			padding: 0;
+			width: 700px;
+		}
+
+		.logo {
+			margin-top: 29px;
+			width: 240px;
+		}
+
+		.menu {
+			color: #00819b;
+			float: right;
+			font-size: 15px;
+			font-weight: 600;
+			letter-spacing: 1px;
+			padding-top: 34px;
+		}
+
+		.heading {
+			margin: 120px auto 0;
+			max-width: 700px;
+		}
+
+		.margin-20 {
+			margin-top: 20px;
+		}
+
+		.margin-40 {
+			margin-top: 40px;
+		}
+
+		.three-column {
+			display: grid;
+			grid-template-columns: 3fr .75fr .75fr;
+			grid-gap: 20px;
+		}
+
+		.mc {
+			float: right;
+		}
+
+			.mc img {
+				width: 40px;
+			}
+
+
+		ul.leaders {
+			max-width: 40em;
+			padding: 0;
+			margin-top: 0;
+			overflow-x: hidden;
+			list-style: none
+		}
+
+			ul.leaders li:before {
+				float: left;
+				width: 0;
+				white-space: nowrap;
+				content: ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . " ". . . . . . . . . . . . . . . . . . . . "
+			}
+
+			ul.leaders span:first-child {
+				padding-right: 0.33em;
+				background: #ecf0f9
+			}
+
+			ul.leaders span + span {
+				float: right;
+				padding-left: 0.33em;
+				background: #ecf0f9
+			}
+
+		.card {
+			background: #fff;
+			border-radius: 2px;
+			box-shadow: 0 2px 8px 1px #ccc;
+			margin: auto;
+			max-width: 620px;
+			padding: 40px;
+		}
+
+		.base-label {
+			color: #4d4d4d;
+			cursor: text;
+			display: block;
+			font-weight: 600;
+			margin-bottom: 6px;
+			text-transform: uppercase;
+			-webkit-transition: display .3s ease-out;
+			transition: display .3s ease-out;
+			font-size: 16px;
+		}
+
+		.grid-container {
+			background: #fff;
+			display: grid;
+			grid-template-columns: 19% 80%;
+			grid-template-rows: 48px 48px 48px;
+			gap: 1px 1px;
+			grid-template-areas: "Label-1 Text-1" "Label-2 Text-2" "Label-3 Text-3" "Label-4 Text-4" "Label-5 Text-5";
+		}
+
+		.Label-1 {
+			grid-area: Label-1;
+		}
+
+		.Text-1 {
+			grid-area: Text-1;
+		}
+
+		.Label-2 {
+			grid-area: Label-2;
+		}
+
+		.Text-2 {
+			grid-area: Text-2;
+		}
+
+		.Label-3 {
+			grid-area: Label-3;
+		}
+
+		.Text-3 {
+			grid-area: Text-3;
+		}
+
+		.Label-4 {
+			grid-area: Label-4;
+		}
+
+		.Text-4 {
+			grid-area: Text-4;
+		}
+
+		.Label-5 {
+			grid-area: Label-5;
+		}
+
+		.Text-5 {
+			grid-area: Text-5;
+		}
+
+		.label-cell {
+			border-top: 1px solid #ccc;
+			padding: 12px;
+		}
+
+		.bottom-border {
+			border-bottom: 1px solid #ccc;
+		}
+
+		.label-cell-left {
+			padding-top: 18px;
+		}
+
+
+		.order-details {
+			margin-top: 0;
+		}
+
+		.input-cc-icon {
+			background: url(https://dl.dropbox.com/s/7xa2zvqhs2xhyq4/cc.png?dl=0) no-repeat scroll 7px 10px;
+		}
+
+		.base-input {
+			height: 20px;
+			background-color: #fbfafb;
+			border-radius: 2px;
+			width: 97%;
+			border: 1px solid #ccc;
+			padding: 8px 0 9px 10px;
+			margin-bottom: 18px;
+			color: #2f3d49;
+			line-height: 16px;
+			font-size: 14px;
+		}
+
+		.button {
+			background-color: hsl(16, 100%, 57%) /*#4b858e*/;
+			border: none;
+			border-radius: 4px;
+			color: #fff;
+			display: block;
+			font-size: 14px;
+			font-weight: 600;
+			letter-spacing: 2px;
+			margin: 24px 0 0;
+			min-width: 300px;
+			padding: 16px;
+			position: relative;
+			text-transform: uppercase;
+			transition: background-color 0.15s ease-out;
+			width: 99%;
+		}
+
+			.button:hover {
+				background-color: #FF4B0A;
+				cursor: pointer;
+			}
+
+		.footer {
+			background: #2f3d49;
+			height: 60px;
+			margin-top: 100px;
+			width: 100%
+		}
+
+		.footer-info {
+			color: #fff;
+			font-size: 13px;
+			margin: auto;
+			padding-top: 22px;
+			max-width: 700px;
+		}
+
+
+		@@media only screen and (max-width: 600px) {
+			body {
+				margin: 0;
+				padding: 0 20px 0;
+			}
+
+			.logo {
+				margin-left: 20px
+			}
+
+			.inline {
+				width: 100%;
+			}
+		}
+	</style>
+
+    }
+
+
+@section Scripts
+	{
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script>
+		$("#paybtn").click(() => {
+			var getUrlString = location.href;
+			var url = new URL(getUrlString);
+			let _this = this;
+			var data =
+			{
+				RoomOrderId: url.searchParams.get('RoomOrderId'),
+				MemberName: $("#memberName").text(),
+				Mobile: $("#memberMobile").text(),
+				RoomName: $("#roomName").text(),
+				RoomAddress: $("#roomAddress").text(),
+				StartDate: $("#startDate").text(),
+				EndDate: $("#endDate").text(),
+				MemberEmail: $("#memberEmail").text(),
+				Total: parseInt($("#roomTotal").text()),
+			}
+			$.ajax({
+				url: 'https://localhost:7150/api/Ecpay/EricEcpay',
+				method: "POST",
+				contentType: 'application/json; charset=utf-8',
+				data: JSON.stringify(data),
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function (response) {
+					const formContainer = document.createElement('div')
+					formContainer.innerHTML = response
+					document.body.appendChild(formContainer)
+					const form = formContainer.querySelector('form')
+					form.submit()
+				},
+				error: function (e) {
+					console.log(e)
+					alert("錯誤");
+				}
+
+			})
+		})
+
+		$("#checkCoupon").click(() => {
+			var couponCode = $('#couponCode').val();
+			$.ajax({
+				url: 'https://localhost:7150/api/Carts/couponCode',
+				method: "POST",
+				contentType: 'application/json',
+				data: JSON.stringify({
+					couponCode: couponCode
+				}),
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function (response) {
+					if (response === 0) {
+						Swal.fire({
+							icon: 'error',
+							title: `無此優惠碼`,
+							showConfirmButton: false,
+							timer: 1500
+						});
+					} else {
+						Swal.fire({
+							icon: 'success',
+							title: `本次使用${response}元`,
+							showConfirmButton: false,
+							timer: 1500
+						});
+						var finalTotal = parseInt($("#roomTotal").text()) - response;
+						$("#roomTotal").text(finalTotal);
+						$("#paymodal").hide()
+						var request =
+						{
+							UsedCoupon: true,
+							Status: false,
+							Qty: null,
+						};
+						$.ajax({
+							url: `https://localhost:7150/api/MemberCoupons/UseMemberCoupon?couponcode=${couponCode}`,
+							type: "POST",
+							contentType: 'application/json',
+							data: JSON.stringify(request),
+							xhrFields: {
+								withCredentials: true
+							},
+							success: function (response) {
+
+							},
+							error: function (e) {
+								Swal.fire({
+									icon: 'error',
+									title: `錯誤`,
+									showConfirmButton: false,
+									timer: 1500
+								});
+							}
+						});
+					}
+					$('#exampleModal').modal('hide');
+				},
+				error: function (e) {
+					console.log(e)
+					alert("錯誤");
+				}
+
+			})
+
+		})
+	</script>
+    }

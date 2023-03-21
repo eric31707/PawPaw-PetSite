@@ -1,0 +1,239 @@
+﻿@section Styles
+    {
+    <style>
+        .star::before {
+            content: "*";
+            color: red
+        }
+    </style>
+}
+	<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+
+<div id="app">
+   
+                    @* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
+		<h5 class="text-center mt-2 star" id="exampleModalLabel">編輯浪浪</h5>
+		<div class="container card shadow-lg col-11  col-sm-10 col-md-9 col-lg-8 col-xl-8">
+			<div class="form-group ">
+				<div class="control-label star">1. 刊登類型</div>
+				<div class="col-lg-8 col-lg-offset-1" v-model="postType">
+					<label class="radio-inline">
+						<input id="postType" type="radio" v-model="postType" name="postType" value="協尋">協尋
+					</label>
+					<label class="radio-inline">
+						<input id="postType" type="radio" v-model="postType" name="postType" value="認養">認養
+					</label>
+					<label class="radio-inline">
+						<input id="postType" type="radio" v-model="postType" name="postType" value="拾獲">拾獲
+					</label> <span class="error_info"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="form-label star">2. 毛色:</label>
+				<input type="text" class="form-control" id="animalColor" v-model="animalColor" />
+			</div>
+		<div class="form-group">
+				<label class="form-label star">3. 種類:</label>
+			<select id="animalTypeId" class="form-control" v-model="animalTypeId">
+				<option value="">請選擇 </option>
+				<option v-model="animalTypeId" value="1">狗</option>
+				<option v-model="animalTypeId" value="2">貓</option>
+				
+			</select>
+		</div>
+			<div class="form-group ">
+				<label class="form-label star">4. 體型:</label>
+				<select id="animalSizeId" class="form-control" v-model="animalSizeId">
+					<option value="1">小型</option>
+					<option value="2">中型</option>
+					<option value="3">大型</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="form-label star">5. 刊登標題:</label>
+				<input id="adoptTitle" type="text" class="form-control" v-model="adoptTitle" />
+			</div>
+			<div class="form-group">
+				<label class="form-label star">6. 浪浪名稱:</label>
+				<input id="adoptName" type="text" class="form-control" v-model="adoptName" />
+			</div>
+			<div class="form-group">
+				<label class="form-label star">7. 性別:</label>
+				<div class="col-lg-8 col-lg-offset-1">
+					<label class="radio-inline" v-model="animalGenderId">
+						<input id="animalGenderId" type="radio" v-model="animalGenderId" value="1">公
+					</label>
+					<label class="radio-inline">
+						<input id="animalGenderId" type="radio" v-model="animalGenderId" value="2">母
+					</label>
+					<label class="radio-inline">
+						<input id="animalGenderId" type="radio" v-model="animalGenderId" value="3">性別未知
+					</label>
+
+
+				</div>
+			</div>
+			<div class="form-group">
+				@*用縣市/地區來判斷經緯度*@
+				@*經緯度顯示而不可編輯*@
+				<label class="form-label star">8. 地址:</label>
+				<input id="areaAddress" type="text" class="form-control" v-model="areaAddress" />
+			</div>
+			<div class="form-group">
+				@*找一下描述框*@
+				<label class="form-label star">9. 浪浪描述:</label>
+				<textarea class="form-control" v-model="adoptDescription" id="adoptDescription" rows="3"></textarea>
+			</div>
+			@* <div class="form-group">
+			<label class="form-label">圖片上傳:</label>
+			<input type="file" class="form-control" id="image1" v-model="item.image1" />
+			</div>*@
+	@*	</div>*@
+
+		<div class="modal-footer">
+                    @*<button type="button" class="btn btn-warning" data-bs-dismiss="modal">關閉</button>*@
+                    
+					<button type="button" class="btn btn-primary" @@click="update">儲存修改</button>
+				</div>
+            </div>
+    @*    </div>
+    </div>*@
+
+</div>
+
+
+@section Scripts{
+	
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+	  integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+		integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+		crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/axios.min.js"></script>
+
+	<script>
+		var getUrlString = location.href;
+        var url = new URL(getUrlString);
+        //console.log(url);
+        const adoptionId = url.searchParams.get('id');
+		
+		//ClassicEditor
+		//	.create(document.querySelector('#adoptDescription'), {
+		//	})
+		//	.then(adoptDescription => {
+		//		window.adoptDescription = adoptDescription;
+		//	})
+		//	.catch(error => {
+		//		console.error(error);
+		//	});
+
+		console.log(adoptionId);
+		var webApiBaseAddr = "https://localhost:7150/";
+		var vueApp = {
+			data() {
+				return {
+					editor: ClassicEditor,
+					AdoptionDTOes: [],
+					//adoptionId: null,
+					memberId:"",
+					animalGenderId: "",
+					areaAddress: "",
+					postType: "",
+                    adoptName: "",
+					adoptDescription: "",
+					image1:"",
+					animalColor:"",
+					animalSizeId:"",
+					animalTypeId: "",
+					//genderOld: "",
+					areaAddressOld: "",
+					post_TypeOld: "",
+					adoptNameOld: "",
+					adoptDescriptionOld: "",
+					image1Old:"",
+					
+				};
+			},
+			mounted: function () {
+				let _this = this;
+				//_this.edit(id);
+				//_this.EventCenter();
+				_this.getAdoptionDetailDTOs();
+				//_this.removeTags();
+			},
+			methods: {
+				
+				 
+
+				//這邊取直要用int 抓取 adioptionId
+				getAdoptionDetailDTOs: function () {
+					function removeTags(html) {
+					  var div = document.createElement("div");
+					  div.innerHTML = html;
+					  return div.textContent || div.innerText || "";
+					};
+					//alert(`${ adoptionId }`);
+					let _this = this;
+					axios.get(`${webApiBaseAddr}api/Adoptions/Edit?id=${adoptionId}`)
+						.then(response => {
+							console.log("123");
+							console.log(response.data[0]);
+							_this.AdoptionDTOes = response.data;
+							_this.image1 = "/AdoptionImages/" + response.data[0].image1;
+							_this.adoptTitle = response.data[0].adoptTitle;
+							//_this.memberName = response.data[0].memberName;
+							_this.adoptDescription = removeTags(response.data[0].adoptDescription);
+							//_this.adoptDescription = response.data[0].adoptDescription;
+							_this.areaAddress = response.data[0].areaAddress;
+							_this.animalGenderId = response.data[0].animalGenderId;
+							_this.animalSizeId = response.data[0].animalSizeId;
+							_this.animalTypeId = response.data[0].animalTypeId;
+							_this.adoptName = response.data[0].adoptName;
+							_this.postType = response.data[0].postType;
+							_this.animalColor = response.data[0].animalColor;
+							
+						})
+						.catch(error => {
+							console.log(error);
+						});
+				},
+				update:function(){
+								//alert("update");
+								let _this=this;
+								var request={};
+								//request.adoptionId = item.adoptionId;
+								//request.areaAddress = item.areaAddress;
+								//request.adoptDescription = item.adoptDescription;
+								//request.adoptName = item.adoptName;
+								//request.postType = item.postType;
+								//request.adoptDescription = item.animalColor;
+								//request.animalSizeId = item.animalSizeId;
+								//request.animalTypeId = item.animalTypeId;
+								//request.animalGenderId = item.animalGenderId;
+								//request.Image1 = item.image1;
+								request.AdoptName = _this.adoptName;
+								request.PostType = _this.postType;
+								request.AnimalTypeId = _this.animalTypeId;
+								request.AnimalColor = _this.animalColor;
+								request.AnimalSizeId = _this.animalSizeId;
+								request.AdoptTitle = _this.adoptTitle;
+								request.AnimalGenderId = _this.animalGenderId;
+								request.AreaAddress = _this.areaAddress;
+								//request.image1 = _this.image1;
+								request.AdoptDescription = _this.adoptDescription;
+								axios.post(`${webApiBaseAddr}api/Adoptions/EditAdoption?id=${adoptionId}`, request).then(response => {
+								alert(response.data);
+						window.location.replace(`https://localhost:7180/PetSite36/AdoptDetail?id=${adoptionId}`);
+									//_this.cancel();
+							});
+					},
+				
+
+			}
+
+		}
+		var app = Vue.createApp(vueApp).mount("#app");
+	</script>
+
+}

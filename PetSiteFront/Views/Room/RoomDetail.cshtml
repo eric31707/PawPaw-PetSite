@@ -1,0 +1,395 @@
+﻿@{
+
+}
+@using PetSiteAPI.Models.VM;
+@model RoomVM
+
+<section class="product-details spad">
+	<div class="container">	
+		<div class="row">
+			<div class="col-lg-6 col-md-6">
+				<div class="product__details__pic">
+					<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+						<ol class="carousel-indicators">
+							@for (var j = 0; j < Model.Image.Count(); j++)
+							{
+								if (j == 0)
+								{
+									<li data-target="#carouselExampleIndicators" data-slide-to="@j" class="active"></li>
+								}
+								else
+								{
+									<li data-target="#carouselExampleIndicators" data-slide-to="@j"></li>
+								}
+
+							}
+						</ol>
+						<div class="carousel-inner">
+							@{
+								int i = 0;
+								@foreach (var img in Model.Image)
+								{
+									var imgstr = "";
+									imgstr = img;
+									if (i == 0)
+									{
+										<div class="carousel-item active">
+											<img class="d-block w-100" src="@Url.Content("~/RoomImages/"+imgstr)" style="height:400px" alt="Image 1">
+										</div>
+									}
+									else
+									{
+										<div class="carousel-item">
+											<img class="d-block w-100" src="@Url.Content("~/RoomImages/"+imgstr)" style="height:400px" alt="Image 1">
+										</div>
+									}
+									i++;
+								}
+							}
+
+						</div>
+						<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="sr-only">Previous</span>
+						</a>
+						<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="sr-only">Next</span>
+						</a>
+					</div>
+					@* @foreach (var img in Model.Image)
+					{
+					var imgstr = "";
+					imgstr = img;
+					<div class="product__details__pic__item">
+					<img class="product__details__pic__item--large"
+					src="@Url.Content("~/RoomImages/"+imgstr)" alt="">
+					</div>
+					<div class="product__details__pic__slider owl-carousel">
+
+					<img data-imgbigurl="@Url.Content("~/RoomImages/"+imgstr)"
+					src="@Url.Content("~/RoomImages/"+imgstr)" alt="">
+					<img data-imgbigurl="img/product/details/product-details-2.jpg"
+					src="img/product/details/thumb-1.jpg" alt="">
+					<img data-imgbigurl="img/product/details/product-details-3.jpg"
+					src="img/product/details/thumb-2.jpg" alt="">
+					<img data-imgbigurl="img/product/details/product-details-5.jpg"
+					src="img/product/details/thumb-3.jpg" alt="">
+					<img data-imgbigurl="img/product/details/product-details-4.jpg"
+					src="img/product/details/thumb-4.jpg" alt="">
+					</div>
+					}*@
+				</div>
+			</div>
+
+			<div class="col-lg-6 col-md-6">
+				<div class="product__details__text">
+					<h5 style="display:none">@Model.RoomId</h5>
+					<h2>@Model.Name</h2>
+					@*<div class="product__details__rating">
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star"></i>
+						<i class="fa fa-star-half-o"></i>
+						<span>(18 reviews)</span>
+					</div>*@
+					<h3>@Model.Price.ToString("0") <span class="h6">  /每晚</span></h3>
+					<p>
+						寵物旅館是專門為寵物提供住宿服務的場所，提供寵物專屬的住宿設施和照顧服務。
+						在這裡，您可以帶著愛寵一同入住，享受到優質的住宿體驗。旅館設施包括寵物房、
+						寵物園區、寵物游泳池等，旅館也提供寵物照顧、美容等專業服務，讓您的愛寵可以得到最好的照顧和關愛。
+					</p>
+					<div class="product__details__quantity">
+						<div class="quantity">
+							@* <div class="pro-qty">
+							<input type="text" value="1">
+							</div>*@
+						</div>
+					</div>
+					<a href="#" id="booking" class="primary-btn" data-toggle="modal" @*data-target=".bd-example-modal-lg"*@>我要訂房</a>
+					@*     <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>*@
+					<div id="bookingmodal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div id="showcase-wrapper">
+									<div id="myCalendarWrapper"></div>
+									<div id="startdate" style="display:none"></div>
+									<div id="enddate" style="display:none"></div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-danger" id="reset">重選</button>
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#payment" id="confirm">確認訂房</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-12">
+				<div class="product__details__tab">
+					<ul class="nav nav-tabs" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+							   aria-selected="true">房型描述</a>
+						</li>
+						@*   <li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
+						aria-selected="false">Information</a>
+						</li>*@
+						@*<li class="nav-item">
+							<a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
+							   aria-selected="false">評論 <span>(1)</span></a>
+						</li>*@
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="tabs-1" role="tabpanel">
+							<div class="product__details__tab__desc">
+								<h6>房型描述</h6>
+								<p>
+									@Model.Description
+								</p>
+							</div>
+						</div>
+						@*<div class="tab-pane" id="tabs-2" role="tabpanel">
+						<div class="product__details__tab__desc">
+						<h6>Products Infomation</h6>
+						<p>
+						Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
+						Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
+						Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
+						sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue leo
+						eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
+						Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent
+						sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ac
+						diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
+						ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+						Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
+						Proin eget tortor risus.
+						</p>
+						<p>
+						Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Lorem
+						ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit aliquet
+						elit, eget tincidunt nibh pulvinar a. Cras ultricies ligula sed magna dictum
+						porta. Cras ultricies ligula sed magna dictum porta. Sed porttitor lectus
+						nibh. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.
+						</p>
+						</div>
+						</div>*@
+						@*<div class="tab-pane" id="tabs-3" role="tabpanel">
+							<div class="product__details__tab__desc">
+								<h6>評論</h6>
+								<p>
+									評論
+									Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
+									Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
+									Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
+									sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue leo
+									eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
+									Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent
+									sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ac
+									diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
+									ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+									Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
+									Proin eget tortor risus.
+								</p>
+							</div>
+						</div>*@
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+@section Styles
+	{
+	<link rel="stylesheet" href="~/ogani-master/css/bootstrap.min.css" type="text/css">
+	<link rel="stylesheet" href="~/ogani-master/css/font-awesome.min.css" type="text/css">
+	<link rel="stylesheet" href="~/ogani-master/css/elegant-icons.css" type="text/css">
+	<link rel="stylesheet" href="~/ogani-master/css/nice-select.css" type="text/css">
+	<link rel="stylesheet" href="~/ogani-master/css/jquery-ui.min.css" type="text/css">
+	<link rel="stylesheet" href="~/ogani-master/css/owl.carousel.min.css" type="text/css">
+	<link rel="stylesheet" href="~/ogani-master/css/slicknav.min.css" type="text/css">
+	<link rel="stylesheet" href="~/ogani-master/css/style.css" type="text/css">
+	<link rel="stylesheet" href="~/CalendarPickerJS-master/CalendarPicker.style.css" type="text/css">
+
+
+	<style>
+		body {
+			justify-items: center;
+			align-content: center;
+		}
+
+
+		#myCalendarWrapper {
+			width: 40em;
+			border: 1px dashed black;
+			padding: 2em 4em;
+			position: relative;
+			font-size: 1rem;
+			margin: 2rem auto 5rem;
+		}
+
+		.footer {
+			background: #1a1a1a;
+		}
+
+		.ftco-navbar-light .navbar-brand {
+			color: #000000;
+			font-weight: 800;
+			font-size: 28px;
+			line-height: 1;
+		}
+
+		/* #myCalendarWrapper:before {
+																																																																			content: '#myCalendarWrapper';
+																																																																			position: absolute;
+																																																																			font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+																																																																			bottom: 0;
+																																																																			left: 50%;
+																																																																			transform: translate(-50%, 2.4rem);
+																																																																			font-size: 1.2rem;
+																																																																			background-color: rgba(93, 93, 93, 0.2);
+																																																																			padding: 0.5rem 1rem 0.4rem;
+																																																																			color: rgb(233, 72, 99);
+																																																																		} */
+
+		code {
+			font-size: 0.7rem;
+			background-color: rgb(249, 249, 249);
+			padding: 0.5rem;
+			margin: 1rem 0 3rem;
+			border-radius: 5px;
+			box-shadow: 2px 2px 0.2rem rgba(0, 0, 0, 0.2);
+		}
+
+			code h3 {
+				padding: 0;
+				margin: 0;
+				font-size: 1.5rem;
+				margin-bottom: 1rem;
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+			}
+
+			code pre {
+				font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+			}
+	</style>
+    }
+
+@section Scripts
+	{
+	<link href="~/ogani-master/js/jquery.nice-select.min.js" rel="stylesheet" />
+	<link href="~/ogani-master/js/jquery-ui.min.js" rel="stylesheet" />
+	<link href="~/ogani-master/js/jquery.slicknav.js" rel="stylesheet" />
+	<link href="~/ogani-master/js/mixitup.min.js" rel="stylesheet" />
+	<link href="~/ogani-master/js/owl.carousel.min.js" rel="stylesheet" />
+	<link href="~/ogani-master/js/main.js" rel="stylesheet" />
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script src='https://unpkg.com/v-calendar'></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script src="~/CalendarPickerJS-master/CalendarPicker.js"></script>
+
+	<script>
+		$("#booking").click(() => {
+			$("#myCalendarWrapper").html("");
+			const nextYear = new Date().getFullYear() + 1;
+			const myCalender = new CalendarPicker('#myCalendarWrapper', {
+				// If max < min or min > max then the only available day will be today.
+				min: new Date(),
+				max: new Date(nextYear, 10), // NOTE: new Date(nextYear, 10) is "Nov 01 <nextYear>"
+				locale: 'zh-TW', // Can be any locale or language code supported by Intl.DateTimeFormat, defaults to 'en-US'
+				showShortWeekdays: true // Can be used to fit calendar onto smaller (mobile) screens, defaults to false
+			});
+			$("#bookingmodal").modal("show");
+		})
+		$("#reset").click(() => {
+			$("#myCalendarWrapper").html("");
+			const nextYear = new Date().getFullYear() + 1;
+			const myCalender = new CalendarPicker('#myCalendarWrapper', {
+				// If max < min or min > max then the only available day will be today.
+				min: new Date(),
+				max: new Date(nextYear, 10), // NOTE: new Date(nextYear, 10) is "Nov 01 <nextYear>"
+				locale: 'zh-TW', // Can be any locale or language code supported by Intl.DateTimeFormat, defaults to 'en-US'
+				showShortWeekdays: true // Can be used to fit calendar onto smaller (mobile) screens, defaults to false
+			});
+		})
+		try {
+			$("#confirm").click(() => {
+				var startdate = $("#startdate").text()
+				var enddate = $("#enddate").text()
+				var end = new Date(enddate)
+				var start = new Date(startdate)
+				const timeDiff = end.getTime() - start.getTime(); // 计算时间差，返回毫秒数
+				const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); // 计算天数，使用Math.floor将结果向下取整				
+				var data =
+				{
+					roomId: @Model.RoomId,
+					price: @Model.Price,
+					startdate: startdate,
+					enddate: enddate,
+					couponId: "2",
+					memberId: "5",
+					days: days,
+				}
+				$.ajax({
+					url: 'https://localhost:7150/api/Rooms',
+					method: "POST",
+					contentType: 'application/json; charset=utf - 8',
+					data: JSON.stringify(data),
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function (response) {
+						//$("#payment").modal("show");
+						console.log(response)
+						$("#bookingmodal").modal("hide");
+						var test = {orderdate: new Date(response[0]), MemberId: response[1] }
+						$.ajax({
+							url: 'https://localhost:7150/api/Rooms/GetOrderId',
+							method: "POST",
+							contentType: 'application/json; charset=utf - 8',
+							data: JSON.stringify(test),
+							success: function (roomorderid) {
+								Swal.fire({
+									icon: 'success',
+									title: `訂購成功，將跳轉至付款頁面`,
+									showConfirmButton: false,
+									timer: 1500
+								});
+								setTimeout((() => window.location.href = "https://localhost:7180/Room/Payment?RoomOrderId=" + roomorderid),1500);								
+							},
+							error: function () {
+								Swal.fire({
+									icon: 'error',
+									title: `請到登入頁面，進行登入`,
+									showConfirmButton: false,
+									timer: 1500
+								});								
+							}
+
+						})
+
+					},
+					error: function () {
+						alert("請選擇入住時間");
+					}
+
+				})
+			})
+
+		}
+		catch
+		{
+			alert("錯誤")
+		}
+
+	</script>
+
+
+}

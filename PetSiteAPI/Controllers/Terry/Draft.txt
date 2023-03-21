@@ -1,0 +1,35 @@
+﻿
+page1 
+[v]建立productDetailDto
+[v]在ProductsController裡面加了GetProductDetail()  --按下商品，顯示商品資訊 
+
+page2
+
+[v]建立CartController
+[todo]在CartsController先建立AddItem() --按下加入購物車，將商品加入購物車icon
+
+//判斷此購物車帳號是誰才能讓他加進來
+[todo]建立CartEntity
+
+
+--todo商品數量加減(使用jquery)
+
+page3
+
+[todo]在CartsController先建立GetCartItem()  --取得CartItem值 
+[todo]建立CartProductEntity
+[todo]建立CartItemEntity  
+[todo]在CartsController先建立UseCoupon() --post coupon代碼並判斷是否有資料，並在下方商品資訊帶入折扣
+
+page4
+
+[todo]在ProductOrdersController先建立OrderInfo()  --將使用者輸入資料傳進資料庫
+
+page5
+
+[todo]傳接綠界科技api
+
+page6
+
+[todo]在productOrdersController建立getProductOrder() --取得訂單資訊
+

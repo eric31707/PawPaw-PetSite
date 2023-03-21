@@ -1,0 +1,330 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Pet Sitting - Free Bootstrap 4 Template by Colorlib</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700,800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="~/css/animate.css">
+
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/css/magnific-popup.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="~/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="~/css/jquery.timepicker.css">
+
+	<link rel="stylesheet" href="~/css/flaticon.css">
+	<link rel="stylesheet" href="~/css/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+		  integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+		  crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico/favicon.ico" />
+
+	@await RenderSectionAsync("Styles", required: false)
+</head>
+
+<body>
+	<div id="apple" class="navy" style="position:fixed ;top:0px; width:100% ;z-index:999; transition:all;transition:0.5s;">
+		<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light" id="ftco-navbar" >
+			<div class="container">
+				<a class="navbar-brand" href="~/Home/Index"><img src="~/images/LayoutLogo.png">Paw Paw</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+						aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="fa fa-bars"></span> Menu
+				</button>
+				<div class="collapse navbar-collapse" id="ftco-nav">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item "><a href="~/willyview/productindex" class="nav-link">購物商城</a></li>
+						<li class="nav-item navbar-dropdown  dropdown" id="drop">
+							<a class="nav-link dropdown-toggle hide-arrow" style=""
+							data-bs-toggle="dropdown" href="~/petsite36/adoptionpage" class="nav-link">領養中心</a>
+							<ul class="dropdown-menu dropdown-menu-end">
+								<li>
+									<a class="dropdown-item" href="~/PetSite36/Allshelter">
+										<i class="bx bx-cog me-2"></i>
+										<span class="align-middle">全國收容所</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="~/PetSite36/PostAdoption">
+										<i class="bx bx-cog me-2"></i>
+										<span class="align-middle">刊登浪浪</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="~/PetSite36/AdoptionPage">
+										<i class="bx bx-cog me-2"></i>
+										<span class="align-middle">領養資訊</span>
+									</a>
+								</li>
+								<li>
+									<div class="dropdown-divider"></div>
+								</li>
+								
+							</ul>
+						</li>
+						<li class="nav-item"><a href="~/event/index" class="nav-link">活動資訊</a></li>
+						<li class="nav-item"><a href="~/Room/Room" class="nav-link">訂房平台</a></li>
+						<li class="nav-item"><a href="~/members/login" class="nav-link" v-if="isAuth==false">登入</a></li>
+						<li class="nav-item"><a href="~/members/register" class="nav-link" v-if="isAuth==false">註冊</a></li>
+						<li class="nav-item" id="test">
+                            <a class="nav-link" href="~/cart/firstStepIndex" v-if="isAuth==true">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span class="badge badge-light">{{cartQuantity}}</span>
+                            </a>
+                        </li>
+						<li class="nav-item navbar-dropdown  dropdown " id="drop" v-if="isAuth==true">
+							<a class="nav-link dropdown-toggle hide-arrow" style="" data-bs-toggle="dropdown">
+								<img src="/images/user.png" class="w-px-40 h-auto rounded-circle" />
+							</a>
+							<ul class="dropdown-menu dropdown-menu-end">
+
+								<li>
+									<a class="dropdown-item" href="~/members/EditMember">
+										<i class="bx bx-user me-2"></i>
+										<span class="align-middle">個人資料</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="~/members/ResetPassword">
+										<i class="bx bx-cog me-2"></i>
+										<span class="align-middle">修改密碼</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="~/cart/orderinfo">
+										<i class="bx bx-cog me-2"></i>
+										<span class="align-middle">訂單資訊</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="~/room/roomorder">
+										<i class="bx bx-cog me-2"></i>
+										<span class="align-middle">訂房資訊</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="~/event/eventcenter">
+										<i class="bx bx-cog me-2"></i>
+										<span class="align-middle">參與活動</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="~/PetSite36/MbAdoptionList">
+										<i class="bx bx-cog me-2"></i>
+										<span class="align-middle">領養刊登</span>
+									</a>
+								</li>
+								<li>
+									<a class="dropdown-item" href="~/PetSite36/MemberCoupon">
+										<i class="bx bx-cog me-2"></i>
+										<span class="align-middle">會員折價券</span>
+									</a>
+								</li>
+								<li>
+									<div class="dropdown-divider"></div>
+								</li>
+								<li>
+									<a class="dropdown-item" onclick="LogOut()">
+										<i class="bx bx-power-off me-2"></i>
+										<span class="align-middle">登出</span>
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- END nav -->
+	</div>
+	
+	<div style="height:130px"></div>
+	@RenderBody()
+	
+	<div style="height:50px"></div>
+
+	<footer class="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 col-lg-4 mb-4 mb-md-0">
+					<h2 class="footer-heading">PawPaw</h2>
+					<p>來自資展國際FUEN25第六組的六個人</p>
+					<p>邑衡 冠升 冠維 冠志 士允 琇薇</p>				
+					<ul class="ftco-footer-social p-0">
+						<li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top" title="Twitter"><span class="fa fa-twitter"></span></a></li>
+						<li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top" title="Facebook"><span class="fa fa-facebook"></span></a></li>
+						<li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top" title="Instagram"><span class="fa fa-instagram"></span></a></li>
+					</ul>
+				</div>
+
+				<div class="col-md-6 col-lg-4 pl-lg-5 mb-4 mb-md-0">
+					<h2 class="footer-heading">快速連結</h2>
+					<ul class="list-unstyled">
+						<li><a href="~/Home/Index" class="py-2 d-block">首頁</a></li>
+						<li><a href="~/WillyView/ProductIndex" class="py-2 d-block">購物</a></li>
+						<li><a href="~/PetSite36/AdoptionPage" class="py-2 d-block">認養</a></li>
+						<li><a href="~/Room/Room" class="py-2 d-block">住宿</a></li>
+						<li><a href="~/Event/Index" class="py-2 d-block">活動</a></li>						
+					</ul>
+				</div>
+				<div class="col-md-6 col-lg-4 mb-4 mb-md-0">
+					<h2 class="footer-heading">有任何問題歡迎聯繫!</h2>
+					<div class="block-23 mb-3">
+						<ul>
+							<li><span class="icon fa fa-map"></span><span class="text">桃園中壢區資展國際</span></li>
+							<li><a href="#"><span class="icon fa fa-phone"></span><span class="text">0967984578</span></a></li>
+							<li><a href="#"><span class="icon fa fa-paper-plane"></span><span class="text">PawPawPetSite@gmail.com</span></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="row mt-5">
+				<div class="col-md-12 text-center">
+
+					<p class="copyright">
+						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+						Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved <i class="fa fa-heart" aria-hidden="true"></i>
+						<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+
+
+
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen">
+        <svg class="circular" width="48px" height="48px">
+            <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+            <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+                    stroke="#F96D00" />
+        </svg>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/axios.min.js"></script>
+    <script src=" https://unpkg.com/vuex@4.0.0/dist/vuex.global.js"></script>
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/jquery.easing.1.3.js"></script>
+    <script src="~/js/jquery.waypoints.min.js"></script>
+    <script src="~/js/jquery.stellar.min.js"></script>
+    <script src="~/js/jquery.animateNumber.min.js"></script>
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <script src="~/js/jquery.timepicker.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/scrollax.min.js"></script>
+    <script src="~/js/main.js"></script>
+	<script>
+		let lastPos = 0
+		const nav = document.querySelector('.navy');
+
+		// 監聽scroll事件
+		document.addEventListener('scroll', function () {
+			let currentPos = window.scrollY;
+			//   往下滑
+			if (currentPos > lastPos ) {
+				nav.style.top = "-120px";			
+			
+			} else {
+				
+				nav.style.top = "0px"; //讓nav bar出現				
+			}
+			lastPos = currentPos;//再記住現在位置，跟未來的位置做比較
+		});
+	</script>
+
+
+
+    <script>
+        var webApiBaseAddr = "https://localhost:7150"
+        var store = Vuex.createStore({
+            state() {
+                return {
+                    cartQuantity: 0
+                }
+            },
+            mutations: {
+                setCartQuantity(state, cartQuantity) {
+                    state.cartQuantity = cartQuantity;
+                }
+            },
+            actions: {
+                getCartQuantity(context) {
+                    axios.get(`${webApiBaseAddr}/api/Carts/cartQty`,{withCredentials:true,})
+                        .then(response => {
+                            context.commit('setCartQuantity', response.data);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+            }
+        });
+        var vueApp =
+        {
+            store,
+            data() {
+                return {
+                    isAuth: false,
+                    errors: [],
+                    cartQuantity: 0,
+                };
+            },
+            mounted: function () {
+                let _this = this;
+                _this.isAuthr();
+                store.dispatch('getCartQuantity');
+                store.watch(state => state.cartQuantity, (cartQuantity) => {
+                    _this.cartQuantity = cartQuantity;
+                });
+            },
+            methods: {
+                isAuthr: function () {
+                    let _this = this;
+                    axios.get(`${webApiBaseAddr}/api/members/IsAuth`, { withCredentials: true }).then(response => {
+                        console.log(response.data);
+                        _this.isAuth = response.data;
+                    })
+                },
+
+            }
+        }
+        Vue.createApp(vueApp).mount("#apple")
+
+        function LogOut() {
+            fetch("https://localhost:7150/api/Members/LogOut", {
+                method: "post",
+                credentials: "include"
+            }).then(response => {
+                if (response.ok) { return }
+            }).then(
+            ).catch(error => { alert(error) });
+            window.location.href = "https://localhost:7180/Members/LogIn";
+        }
+
+
+
+
+
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+﻿{
+   "CodeGenerationMode": 2,
+   "ContextClassName": "PetSiteContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models\/EFModels",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "PetSiteAPI",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[Adoptions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AnimalSizes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AnimalTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ApplyEvents]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CartItems]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Carts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Colors]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Coupons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Events]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Flavors]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Genders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberCoupons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Members]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberTags]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ParentCategories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Payments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductCategories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductImages]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductName]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductOrderItems]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductOrders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Products]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PurchaseItems]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Purchases]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RoomCartItems]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RoomImages]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RoomOrderItems]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RoomOrders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Rooms]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Shipments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Sizes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Species]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Suppliers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Tags]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "DESKTOP-PAKSETB.PetSite",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

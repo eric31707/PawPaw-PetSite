@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-PetSiteFront-a1997fc0-b548-4f5d-bb46-a31e04f02a70</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\NewFolder\**" />
+    <Content Remove="Controllers\NewFolder\**" />
+    <EmbeddedResource Remove="Controllers\NewFolder\**" />
+    <None Remove="Controllers\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\img\**" />
+    <Content Remove="wwwroot\img\**" />
+    <EmbeddedResource Remove="wwwroot\img\**" />
+    <None Remove="wwwroot\img\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\images\feature-1.jpg" />
+    <Content Remove="wwwroot\images\feature-2.jpg" />
+    <Content Remove="wwwroot\images\feature-3.jpg" />
+    <Content Remove="wwwroot\images\feature-4.jpg" />
+    <Content Remove="wwwroot\images\feature-5.jpg" />
+    <Content Remove="wwwroot\images\feature-6.jpg" />
+    <Content Remove="wwwroot\images\feature-7.jpg" />
+    <Content Remove="wwwroot\images\feature-8.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.14">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\" />
+    <Folder Include="Controllers\Eddy\" />
+    <Folder Include="Controllers\Eric\" />
+    <Folder Include="Controllers\Evan\" />
+    <Folder Include="Controllers\ibubl\" />
+    <Folder Include="Controllers\Willy\" />
+    <Folder Include="Views\Hotel\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PetSiteAPI\PetSiteAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\Terry\" />
+    <Folder Include="Controllers\Willy\" />
+    <Folder Include="wwwroot\AdoptionImages\" />
+  </ItemGroup>
+
+</Project>

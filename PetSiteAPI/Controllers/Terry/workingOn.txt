@@ -1,0 +1,19 @@
+﻿資料庫更新
+--working on CartEntity
+[v]CartProductEntity
+[v]CartItemEntity
+[v]CartEntity todo方法還沒寫
+--working on OrderEntity
+[]OrderProductEntity
+[]OrderItemEntity
+[]OrderEntity 
+[]CreateOrderRequest
+[]CreateOrderItem
+--working on CartsController
+[v]AddItem()
+--working on repo
+[still working on]CartRepository
+[still working on]ProductRepository
+--Service
+[still working on]CartService
+

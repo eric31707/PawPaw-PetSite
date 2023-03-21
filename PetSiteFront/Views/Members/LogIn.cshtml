@@ -1,0 +1,204 @@
+﻿
+
+
+<div class="col-1 col-xl-4 col-sm-3"></div>
+<div class="container col-10 col-sm-6 mt-4 mb-4 col-xl-4" style="height:700px" id="app">
+	<div style="height:70px"></div>
+	<div class="card " style="border-radius:20px">
+		<div class="card-body">		
+				<img style=" display: block; margin: 0 auto;" src="~/images/paw paw.png" />			
+			<h2 class="mb-2 text-center m-3">登入會員</h2>
+
+
+			<div class="mb-3">
+				<label for="email" class="form-label">帳號</label>
+				<input type="text"
+					   class="form-control"
+					   id="account"
+					   name="email-username"
+					   placeholder="請輸入帳號"
+					   autofocus />
+			</div>
+			<div class="mb-3 form-password-toggle">
+				<div class="d-flex justify-content-between">
+					<label class="form-label" for="password">密碼</label>
+					<button type="button" class="btn btn-white" data-toggle="modal" data-target="#staticBackdrop">
+						忘記密碼?
+					</button>
+					<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="staticBackdropLabel">忘記密碼</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form>
+										<div class="form-group">
+											<label for="accountforget" class="col-form-label">帳號</label>
+											<input type="text" class="form-control" id="accountforget" v-model="accountForget">
+										</div>
+										<div class="form-group">
+											<label for="emailforget" class="col-form-label">email</label>
+											<input type="text" class="form-control" id="emailforget" v-model="emailForget">
+										</div>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" @@click="testemail">測試</button>
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+									<button type="button" class="btn btn-primary" @@click="forgetPassword">確認</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="input-group input-group-merge">
+					<input type="password"
+						   id="password"
+						   class="form-control"
+						   name="password"
+						   placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+						   aria-describedby="password" />
+
+				</div>
+			</div>
+
+			<br />
+			<div class="mb-3 ">
+				<button class="btn btn-primary  w-100" onclick="LogIn()">登入</button>
+			</div>
+			<br />
+
+			<div class="mb-3 ml-2">
+				<div id="g_id_onload"
+					 data-client_id="155371877084-9sm4dfo96vqpjcjp0i30l9rej4vm6jja.apps.googleusercontent.com"
+					 data-login_uri="https://localhost:7150/api/Members/ValidGoogleLogin"
+					 data-auto_prompt="false">
+				</div>
+				<div class="g_id_signin"
+					 data-type="standard"
+					 data-size="large"
+					 data-theme="outline"
+					 data-text="sign_in_with"
+					 data-shape="rectangular"
+					 data-logo_alignment="left">
+				</div>
+			</div>
+
+
+			<br />
+			<p class="text-center">
+				<span>還沒有會員嗎?</span>
+				<a href="~/members/Register">
+					<span>註冊新帳號</span>
+				</a>
+			</p>
+			
+		</div>
+	</div>
+</div>
+<div class="col-1 col-xl-4 col-sm-3" ></div>
+<div style="height:100px;background-color:white"></div>
+
+
+
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="~/js/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.cjs.min.js" integrity="sha512-GAZdoqaWBVt41E9aFD6m/Ng1bttD+LdVCMKIZ9CK9NrGvElI6RzUlAtoV+Yew+s1oOSOwZFUSiGSOwhXMTINsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+@section Scripts{
+	<script>
+
+
+		function LogIn() {
+			var account = $("#account").val();
+			var password = $("#password").val();
+			var LogInInfo = { Account: account, Password: password };
+			fetch("https://localhost:7150/api/Members/LogIn", {
+				method: "post",
+				body: JSON.stringify(LogInInfo),
+				headers: { "Content-Type": "application/json", },
+				credentials: "include"
+			}).then(response => {
+				if (response.ok) { return response.text(); }
+			}).then(data => {
+				if (data == "登入成功") {
+					Swal.fire({
+						icon: 'success',
+						title: `${data}`,
+						showConfirmButton: false,
+						timer: 1500
+					});
+					setTimeout((()=> window.location.href = "/Home/Index"),1500);
+				}
+				else {
+					Swal.fire({
+						icon: 'error',
+						title: `${data}`,
+						showConfirmButton: false,
+						timer: 1500
+					})
+				}
+
+			}).catch(error => { alert(error) });
+		};
+
+
+		var webApiBaseAddr = "https://localhost:7150"
+		var vueApp = {
+			data() {
+				return {
+					accountForget: "",
+					emailForget: "",
+					errors: [],
+				};
+			},
+			mounted: function () {
+				let _this = this;
+			},
+			methods: {
+				forgetPassword: function () {
+					let _this = this;
+					var forgetPasseordMember = {};
+					forgetPasseordMember.account = _this.accountForget;
+					forgetPasseordMember.email = _this.emailForget;
+
+
+					axios.post(`${webApiBaseAddr}/api/members/forgetPassword`, forgetPasseordMember).then(response => {
+						if (response.data == "電子郵件已寄出") {						
+							Swal.fire({
+								title: `${response.data}`,
+								text: '請至信箱確認!',
+								icon: 'success',
+								showCancelButton: false,
+								confirmButtonColor: '#3085d6',								
+								confirmButtonText: '確認!'
+							}).then((result) => {
+								if (result.isConfirmed) {
+									window.location.href = "/Home/Index"								
+								}
+							})
+							
+						} else {
+							Swal.fire(
+								`${response.data}`,
+								'請重新輸入!',
+								'error'
+							)
+						}
+
+					}).catch((error) => { console.log(error.response.status) })
+				},
+				testemail:function () {
+                    let _this = this;
+                   _this.emailForget="pawpawpetsitetest@gmail.com";
+				   _this.accountForget="test1234";}
+			}
+		}
+		var app = Vue.createApp(vueApp).mount("#app");
+	</script>
+}

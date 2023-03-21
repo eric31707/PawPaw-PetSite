@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .carheight{
+            height:200px;
+        }
+
+        .progressbar {
+            counter-reset: step;
+        }
+
+            .progressbar li {
+                list-style-type: none;
+                width: 25%;
+                float: left;
+                font-size: 12px;
+                position: relative;
+                text-align: center;
+                text-transform: uppercase;
+                color: #7d7d7d;
+            }
+
+                .progressbar li:before {
+                    width: 30px;
+                    height: 30px;
+                    content: counter(step);
+                    counter-increment: step;
+                    line-height: 30px;
+                    border: 2px solid #7d7d7d;
+                    display: block;
+                    text-align: center;
+                    margin: 0 auto 10px auto;
+                    border-radius: 50%;
+                    background-color: white;
+                }
+
+                .progressbar li:after {
+                    width: 100%;
+                    height: 2px;
+                    content: '';
+                    position: absolute;
+                    background-color: #7d7d7d;
+                    top: 15px;
+                    left: -50%;
+                    z-index: -1;
+                }
+
+                .progressbar li:first-child:after {
+                    content: none;
+                }
+
+                .progressbar li.active {
+                    color: green;
+                }
+
+                    .progressbar li.active:before {
+                        border-color: #55b776;
+                    }
+
+                    .progressbar li.active + li:after {
+                        background-color: #55b776;
+                    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+    <div>
+        <p>　</p>
+        <ul class="progressbar">
+            <li class="active">購物車</li>
+            <li class="active">訂單資料</li>
+            <li class="active">建立訂單</li>
+            <li class="active">訂單完成</li>
+        </ul>
+        <p>　</p>
+        <p>　</p>
+    </div>
+    <div id="app">
+        <div>
+                <h1 class="text-center fs-1"><img src="~/images/checkedterry.png" />  謝謝您!您的訂單已建立完成</h1>
+
+            <h3 class="text-center fs-2 col" v-model="orderId">訂單編號:{{orderId}}</h3>
+        </div>
+
+        <div class=" row">
+            <div class="col-6">
+                    <div class="card carheight">
+                    <div class="card-body">
+                        <h5 class="card-title">訂單資訊</h5>
+                        <p class="card-text" v-model="CreateDate">訂單成立時間：{{CreateDate}}</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class=" col-6">
+                    <div class="card carheight">
+                    <div class="card-body">
+                        <h5 class="card-title">會員資訊</h5>
+                        <p class="card-text" v-model="memberName">會員名稱：{{memberName}}</p>
+                        <p class="card-text" v-model="email">信箱：{{Email}}</p>
+                        <p class="card-text" v-model="memberMobile">電話：{{memberMobile}}</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" row">
+            <div class="col-6 mt-3">
+                    <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">送貨資訊</h5>
+                        <p class="card-text" v-model="receiver">姓名：{{receiver}}</p>
+                        <p class="card-text" v-model="shipmentMethod">運送方式：{{shipmentMethod}}</p>
+                        <p class="card-text" v-model="mobile">電話：{{mobile}}</p>
+                        <p class="card-text" v-model="address">地址：{{address}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class=" col-6 mt-3">
+                    <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">付款資訊</h5>
+                        <p class="card-text" v-model="paymentMethod">付款方式：{{paymentMethod}}</p>
+                        <p class="card-text" v-model="paymentStatus">付款狀態：{{paymentStatus}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p>　</p>
+        <div class="container d-flex justify-content-center">
+            <p class="row justify-content-end" style="margin-top:15px;">
+                <a class="btn btn-primary text-white justify-content-center"
+                   style="padding-left:56px;padding-right:56px;margin-right:56px" href="https://localhost:7180/willyview/productindex">繼續購物</a>
+            </p>
+        </div>
+    </div>
+    </div>
+    @section Scripts{
+        <script src="https://unpkg.com/vue@next"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/axios.min.js"></script>
+        <script>
+            var webApiBaseUri = "https://localhost:7150";
+            var app = {
+                data() {
+                    return {
+                        CreateDate: '',
+                        memberName: '',
+                        Email: '',
+                        memberMobile: '',
+                        receiver: '',
+                        shipmentMethod: '',
+                        mobile: '',
+                        address: '',
+                        paymentMethod: '',
+                        paymentStatus: '',
+                        orderId: '',
+                    };
+                },
+                mounted: function (event) {
+                    let _this = this;
+                    _this.getProductOrder();
+                },
+                methods: {
+                    getProductOrder() {
+                        let _this = this;
+                        axios.get(`${webApiBaseUri}/api/Order`, { withCredentials: true, })
+                            .then(response => {
+                                console.log(response.data);
+                                _this.orderId = response.data.orderId;
+                                _this.CreateDate = response.data.createDate;
+                                _this.memberName = response.data.memberName;
+                                _this.Email = response.data.email;
+                                _this.memberMobile = response.data.memberMobile;
+                                _this.receiver = response.data.receiver;
+                                _this.shipmentMethod = response.data.shipmentMethod;
+                                _this.mobile = response.data.mobile;
+                                _this.address = response.data.address;
+                                _this.paymentMethod = response.data.paymentMethod;
+                                _this.paymentStatus = response.data.paymentStatus;
+                            })
+                            .catch(
+                                error => {
+                                    console.log(error);
+                                }
+                            )
+                    }
+                }
+            }
+           
+            Vue.createApp(app).mount('#app')
+        </script>
+    }
+
+</body>
+
+</html>

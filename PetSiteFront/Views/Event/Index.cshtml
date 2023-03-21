@@ -1,0 +1,274 @@
+﻿<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+@section Styles
+    {
+    <style>
+        .w520px {
+            width: 520px;
+        }
+        .h520px{
+            height:60px;
+        }
+
+        .h60px {
+            height: 60px;
+        }
+
+        .h100px {
+            height: 115px;
+        }
+
+        .title {
+            color: red;
+            font-weight: bolder;
+        }
+
+        .object-fit-cover {
+            object-fit: cover;
+        }
+
+        .imgscale img {
+            transition: all 0.2s;
+        }
+
+        .imgscale:hover img {
+            transform: scale(1.1);
+        }
+
+        .touchcard:hover {
+            background: #416898;
+        }
+
+            .touchcard:hover .touchcardtext {
+                color: white;
+            }
+
+            .touchcard:hover .touchcardbutton {
+                background-color: red;
+                color: white;
+            }
+
+        .h180px {
+            height: 180px;
+        }
+
+        .nowrap {
+            white-space: nowrap;
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+            opacity: 0.65;
+        }
+
+            .cursor-pointer:hover {
+                opacity: 1.0;
+            }
+
+        .form-control, select, #search {
+            height: 51px; /* 調整高度的值根據您的需求進行更改 */
+        }
+        .loding{
+            opacity:0;
+        }
+        .badge{
+            background-color: gray;
+        }
+    </style>
+}
+
+
+
+<div class="container">
+    @*輪播圖*@
+    <div id="carouselExampleIndicators" class="carousel slide my-5 shadow-lg rounded-5" data-bs-ride="carousel"
+         data-bs-interval="4000" data-bs-mouse="false">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
+                    aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4"
+                    aria-label="Slide 5"></button>
+        </div>
+
+        <div class="carousel-inner rounded-5 shadow-lg">
+            <div class="carousel-item active">
+                <a href="http://www.google.com">
+                    <img src="/images/EventCarousel01.jpg" class="d-block w-100">
+                </a>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/EventCarousel02.jpg" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+                <img src="/images/EventCarousel03.jpg" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+                <img src="/images/EventCarousel04.jpg" class="d-block w-100">
+            </div>
+            <div class="carousel-item">
+                <img src="/images/EventCarousel05.jpg" class="d-block w-100">
+            </div>
+        </div>
+        <div class="position-absolute start-0 bottom-50 ms-3 cursor-pointer"
+             data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon bg-black" aria-hidden="true"></span>
+        </div>
+
+        <div class="position-absolute end-0 bottom-50 me-3 cursor-pointer" type="button"
+             data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon bg-black" aria-hidden="true"></span>
+        </div>
+    </div>
+
+    @*搜尋*@
+    <div class="row d-flex justify-content-center">
+        <div class="col-12 col-sm-12 col-md-5 col-lg-4 col-xl-4 mt-2">
+            <select class="form-select" aria-label="Default select example" id="searchEventsCategoryName">
+                <option value="" selected>全部</option>
+                <option value="狗">狗</option>
+                <option value="貓">貓</option>
+            </select>
+        </div>
+        <div class="col-12 col-sm-12 col-md-5 col-lg-6 col-xl-6 mt-2">
+            <input type="email" class="form-control" id="searchEventName" placeholder="關鍵字搜尋">
+        </div>
+        <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mt-2">
+            <button class="btn btn-secondary" id="search">搜尋</button>
+        </div>
+    </div>
+
+    @*主內容*@
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 " id="add">
+
+
+    </div>
+
+
+    @*加載更多活動*@
+    <div class="d-flex justify-content-center row mt-3">
+        <button class="btn btn-info col-4 col-sm-4 col-md-3 col-lg-2 col-xl-2 opacity-75" id="readMore"style="display:none">查看更多</button>
+    </div>
+    <div class="d-flex justify-content-center row mt-3">
+        <p class="col-4 col-sm-4 col-md-3 col-lg-2 col-xl-2 opacity-75" id="noEvent" style="display:none">沒有更多活動了</p>
+    </div>
+    <div class="d-flex justify-content-center" id="loding">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden"></span>
+        </div>
+        <span> 等待中，請稍後...</span>
+    </div>
+
+
+</div>
+
+
+
+@section Scripts{
+
+    <script>
+        let searchEventsCategoryName = $('#searchEventsCategoryName').val();
+        let searchEventName = $('#searchEventName').val();
+        let skipNumber = 0;
+        let takeCount = 9;
+        $('#search').click(function () {
+            $('#readMore').show();
+            $('#noEvent').hide();
+            searchEventsCategoryName = $('#searchEventsCategoryName').val();
+            searchEventName = $('#searchEventName').val();
+            $("#add").children().remove();
+            skipNumber = 0;
+            ajaxToGet();
+        });
+
+        $('#readMore').click(function () {
+            ajaxToGet();
+        });
+
+        function toHtmlString(image, title, location, eventId, applyTimeEnd, progressTimeStart) {
+            let imagePath = '/images/';
+            let url = 'https://localhost:7180/Event/Details?id=';
+            let htmlString = `
+                <div class="col">
+                    <div class="card shadow-lg rounded-4 m-2 imgscale touchcard">
+                                                                    <!-- control -->
+                        <div class="ms-2 me-2">
+                            <!-- 封面圖片 -->
+                            <div class="card-img w520px h180px rounded overflow-hidden my-2">
+                                <a href="${url}${eventId}">
+                                    <img src="${imagePath}${image}" alt="破" class="card-img-top object-fit-cover h-100 w-100">
+                                </a>
+                            </div>
+                            <a href="${url}${eventId}" style="color: black ;text-decoration: none;">
+                                <div class="card-header">
+                                     <div class="h520px overflow-hidden">
+                                        <h4 class="touchcardtext ">${title}</h4>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="card-body h100px overflow-hidden">
+                                <div>
+                                    <span class="touchcardtext">活動日期：${progressTimeStart}</span>
+                                </div>
+                                <div>
+                                    <span class="touchcardtext">報名截止：${applyTimeEnd}</span>
+                                </div>
+                                <div>
+                                    <span class="touchcardtext">集合地點：${location}</span>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="${url}${eventId}">
+                                    <button class="w-100 btn btn-primary touchcardbutton">我要報名</button>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                `;
+            return htmlString;
+        }
+        function ajaxToGet() {
+            $('#loding').show();
+            $('#loding').removeClass('loding');
+            $.ajax({
+                type: "Get",
+                url: `https://localhost:7150/api/Events/Card?EventsCategoryName=${searchEventsCategoryName}&EventName=${searchEventName}&skipNumber=${skipNumber}`,
+                success: function (data) {
+                    console.log(data)
+                    //把每個card渲染出來
+                    for (let i = 0; i < data.length; i++) {
+                        let stringHtml = toHtmlString(data[i].image, data[i].title, data[i].location, data[i].eventId, data[i].applyTimeEnd, data[i].progressTimeStart);
+                        $("#add").append(stringHtml);
+                    }
+                    skipNumber++;
+                    $('#readMore').show();
+                    $('#loding').addClass('loding');
+                    if (data.length < takeCount) {
+                        console.log("沒資料了");
+                        $('#readMore').hide();
+                        $('#noEvent').show();
+                    };
+                },
+                error: function () {
+                    alert('失敗');
+                    $('#loding').hide();
+                }
+            });
+        };
+       
+        //一開始抓資料
+        ajaxToGet();
+
+    </script>
+
+}

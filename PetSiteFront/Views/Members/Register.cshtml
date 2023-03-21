@@ -1,0 +1,331 @@
+﻿@section Styles{
+
+	<style>
+	.star::before {
+        content: "*";
+        color: red
+        }
+	</style>
+}
+
+<div class="col-1 col-xl-4 col-sm-3"></div>
+
+<div class="container col-10 col-sm-6 mt-4 mb-4 col-xl-4" style="" id="app">
+	<div style="height:70px"></div>
+	<div class="card " style="border-radius:20px">
+		<div class="card-body">
+			<h2 class="mb-2 text-center m-3">註冊會員</h2>
+
+			<div class="mb-3">
+				<label for="userName" class="form-label star">姓名</label>
+				<input type="text"
+					   class="form-control"
+					   id="userName"
+					   name="username"
+					   placeholder="請輸入姓名"
+					   v-model="userName"
+					   autofocus
+					   required />
+			</div>
+			<div class="mb-3 ">
+				<label for="email" class="form-label star">帳號</label>
+				<input type="text"
+					   class="form-control"
+					   id="account"
+					   name="email-username"
+					   placeholder="請輸入帳號"
+					   v-model="account"
+					   v-on:keyup="isAccountExist"
+					   autofocus
+					   required />
+				<img src="~/images/checked.png" class="float-left" v-if="accountExist==0" />
+				<p v-if="accountExist==false">----帳號尚未被使用----</p>
+				<img src="~/images/unchecked (1).png" class="float-left" v-if="accountExist==1" />
+				<p v-if="accountExist==true">----帳號已被使用----</p>
+				<img src="~/images/unchecked (1).png" class="float-left" v-if="accountExist==2" />
+				<p v-if="accountExist==2">----帳號需在8到16字元內且含有英文及數字----</p>
+			</div>
+			<div class="mb-3 form-password-toggle">
+				<div class="d-flex justify-content-between">
+					<label class="form-label star" for="password">密碼</label>
+				</div>
+				<div class="input-group input-group-merge">
+					<input type="password"
+						   id="password"
+						   class="form-control"
+						   name="password"
+						   placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+						   v-model="password"
+						   aria-describedby="password"
+						   required />
+
+				</div>
+			</div>
+			<div class="mb-3 form-password-toggle">
+				<div class="d-flex justify-content-between">
+					<label class="form-label star" for="password">確認密碼</label>
+				</div>
+				<div class="input-group input-group-merge">
+					<input type="password"
+						   id="confirmPassword"
+						   class="form-control"
+						   name="confirmPassword"
+						   placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+						   v-model="confirmPassword"
+						   aria-describedby="password"
+						   required />
+
+				</div>
+			</div>
+
+			<div class="mb-3">
+				<label for="email" class="form-label star">E-mail</label>
+				<input type="text"
+					   class="form-control"
+					   id="email"
+					   name="email"
+					   placeholder="請輸入E-mail"
+					   v-model="email"
+					   autofocus
+					   required />
+			</div>
+			<div class="mb-3">
+				<label for="mobile" class="form-label">手機號碼</label>
+				<input type="text"
+					   class="form-control"
+					   id="mobile"
+					   name="mobile"
+					   placeholder="請輸入手機號碼"
+					   v-model="mobile"
+					   autofocus />
+			</div>
+			<label for="html5-date-input" class="col-form-label">生日</label>
+			<div class="mb-3">
+				<div class="">
+					<input class="form-control" type="date" id="html5-date-input" v-model="birthDate" />
+				</div>
+			</div>
+			<label class="control-label">居住地址</label>
+			<div class="form-group mb-3 row ">
+				<div class="col-6">
+					<label class="control-label" style="padding:0px 15px">城市</label>
+					<select class="form-control" v-model="selectedCity" @@change="loadDistricts">
+						<option value="">請選擇城市</option>
+						<option v-for="city in allArea" :value="city.CityName">{{city.CityName}}</option>
+					</select>
+				</div>
+				<div class="col-6">
+					<label class="control-label" style="padding:0px 15px">區域</label>
+					<select class="form-control" v-model="selectedDistrict">
+						<option value="">請選擇區域</option>
+						<option v-for="district in districts" :value="district.AreaName">
+							{{district.AreaName}}
+						</option>
+					</select>
+				</div>
+
+			</div>
+			<div>
+				<label class="control-label" style="padding:0px 15px">住址</label>
+				<input name="ReceiverAddress" class="form-control" v-model="address" id="ReceiverAddress">
+			</div>
+			<br />
+			<div class="mb-3 " v-on:mouseenter="validateForm">
+				<button class="btn btn-primary  w-100" @@click="register" id="submit">註冊</button>
+			</div>
+			<br />
+
+			<ul>
+				<li v-for="error in errors" class="text-danger">{{error}}</li>
+			</ul>
+
+			<br />
+			<p class="text-center">
+				<span>已經有帳號了?</span>
+				<a href="/members/login">
+					<span>會員登入</span>
+				</a>
+			</p>
+		</div>
+	</div>
+	<button class="btn btn-outline-info border-1 mt-2" @@click="test">測試</button>
+</div>
+
+<div class="col-sm-3 col-xl-4 col-1"></div>
+@section Scripts{
+	<script src="https://unpkg.com/vue@next"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/axios.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script>
+
+
+		var webApiBaseAddr = "https://localhost:7150"
+		var vueApp = {
+			data() {
+				return {
+					userName: "",
+					account: "",
+					password: "",
+					confirmPassword: "",
+					email: "",
+					mobile: "",
+					address: "",
+					birthDate: "",
+					errors: [],
+					accountExist: null,
+					cities: [],
+					districts: [],
+					selectedCity: null,
+					selectedDistrict: null,
+					allArea: [],
+					fullAddress: null,
+				};
+			},
+			mounted: function () {
+				let _this = this;
+				this.loadCities();
+			},
+			methods: {
+				register: function () {
+					let _this = this;
+					var register = {};
+					_this.fullAddress = _this.selectedCity + _this.selectedDistrict + _this.address
+					register.name = _this.userName;
+					register.account = _this.account;
+					register.password = _this.password;
+					register.email = _this.email;
+					register.mobile = _this.mobile;
+					register.address = _this.fullAddress;
+					register.birthDate = _this.birthDate;
+					if (_this.errors.length == 0) {
+						axios.post(`${webApiBaseAddr}/api/members/register`, register).then(response => {
+							Swal.fire({
+								icon: 'success',
+								title: `${response.data}`,
+								text:'驗證信已寄出，請先驗證後再登入',
+								showConfirmButton: false,
+								timer: 1500})
+							setTimeout((()=>window.location.href="/members/LogIn"),1500)
+						}).catch((error) => {
+							console.log(error.response.status)
+						})
+					}
+				},
+				isAccountExist: function () {
+					let _this = this;
+					var account = _this.account
+					let num = account.length;
+					var n = /[0-9]/;
+					var e = /[A-Za-z]/;
+					var ni = n.test(account);
+					var ei = e.test(account);
+
+					if (num > 7 && ni == true && ei == true) {
+						axios.get(`${webApiBaseAddr}/api/members/IsAccountExist?account=${account}`).then(response => {
+							if (response.data) { this.accountExist = 1 }
+							else { this.accountExist = 0 }
+
+						})
+					}
+					if (num < 8 || num > 16 || ni == false || ei == false) {
+						this.accountExist = 2
+					}
+
+
+				},
+				validateForm: function () {
+					let _this = this;
+
+					this.errors = [];
+					if (this.userName == "") {
+						this.errors.push("姓名必填!")
+					}
+					if (this.account == "") {
+						this.errors.push("帳號必填!")
+					} else {
+						let account = this.account;
+						let num = account.length;
+						var n = /[0-9]/;
+						var e = /[a-zA-Z]/;
+						var ni = n.test(account);
+						var ei = e.test(account);
+						if (num < 7 || num > 15 || ni == false || ei == false) {
+							this.errors.push("帳號需在8到16字元內且含有英文及數字")
+						}
+					}
+					if (this.accountExist == 1) {
+						this.errors.push("帳號已被使用")
+					}
+					if (this.email == "") {
+						this.errors.push("email必填!")
+					}
+					else {
+						let email = this.email;
+						var emailRegxp = /[\w-]+@@([\w-]+\.)+[\w-]+/;
+						var emailAuth = emailRegxp.test(email);
+
+						if (emailAuth == false) {
+							this.errors.push("信箱格式錯誤")
+						}
+					}
+					if (this.password == "") {
+						this.errors.push("密碼必填!")
+					} else {
+						let password = this.password;
+						let num = password.length;
+						var n = /[0-9]/;
+						var e = /[a-zA-Z]/;
+						var ni = n.test(password);
+						var ei = e.test(password);
+						if (num < 7 || num > 15 || ni == false || ei == false) {
+							this.errors.push("密碼需在8到16字元內且含有英文及數字")
+						}
+					}
+					if (this.password != this.confirmPassword) {
+						this.errors.push("確認密碼與密碼不符")
+					}
+					if (this.errors.length > 0) {
+						$("#submit").attr("disabled", true);
+					}
+					if (this.errors.length == 0) {
+						$("#submit").attr("disabled", false);
+					}
+
+				},
+				loadCities() {
+					let _this = this;
+					var AllLocationUrl = "https://raw.githubusercontent.com/donma/TaiwanAddressCityAreaRoadChineseEnglishJSON/master/CityCountyData.json";
+					axios.get(`${AllLocationUrl}`)
+						.then(response => {
+							_this.allArea = response.data;
+						})
+						.catch(
+							error => {
+								console.log(error);
+							}
+						)
+				},
+				loadDistricts() {
+					let _this = this;
+					if (_this.selectedCity != null) {
+						let selectedCityObj = _this.allArea.find(city => city.CityName === _this.selectedCity);
+						_this.districts = selectedCityObj.AreaList
+					}
+				},
+				test(){
+					let _this = this;
+					_this.userName = "test1234";
+					_this.account = "test1234";
+					_this.password = "test1234";
+					_this.confirmPassword = "test1234";
+					_this.email = "pawpawpetsitetest@gmail.com";
+					_this.mobile="0911222333";
+					_this.address="新生路1號"					
+					_this.birthDate = "2000-01-01"
+				}
+
+			}
+		}
+		var app = Vue.createApp(vueApp).mount("#app");
+	</script>
+}

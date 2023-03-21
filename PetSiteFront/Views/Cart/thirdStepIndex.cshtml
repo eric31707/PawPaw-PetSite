@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+
+        .progressbar {
+            counter-reset: step;
+        }
+
+            .progressbar li {
+                list-style-type: none;
+                width: 25%;
+                float: left;
+                font-size: 12px;
+                position: relative;
+                text-align: center;
+                text-transform: uppercase;
+                color: #7d7d7d;
+            }
+
+                .progressbar li:before {
+                    width: 30px;
+                    height: 30px;
+                    content: counter(step);
+                    counter-increment: step;
+                    line-height: 30px;
+                    border: 2px solid #7d7d7d;
+                    display: block;
+                    text-align: center;
+                    margin: 0 auto 10px auto;
+                    border-radius: 50%;
+                    background-color: white;
+                }
+
+                .progressbar li:after {
+                    width: 100%;
+                    height: 2px;
+                    content: '';
+                    position: absolute;
+                    background-color: #7d7d7d;
+                    top: 15px;
+                    left: -50%;
+                    z-index: -1;
+                }
+
+                .progressbar li:first-child:after {
+                    content: none;
+                }
+
+                .progressbar li.active {
+                    color: green;
+                }
+
+                    .progressbar li.active:before {
+                        border-color: #55b776;
+                    }
+
+                    .progressbar li.active + li:after {
+                        background-color: #55b776;
+                    }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <div>
+        <p>　</p>
+        <ul class="progressbar">
+            <li class="active">購物車</li>
+            <li class="active">訂單資料</li>
+            <li class="active">建立訂單</li>
+            <li>訂單完成</li>
+        </ul>
+        <p>　</p>
+        <p>　</p>
+    </div>
+    <div class="text-center">
+        <p></p>
+        <h4>訂單建立成功</h4>
+        <p></p>
+    </div>
+
+    <div class="card shadow-sm rounded" id="app">
+        <div class="card-body">
+
+            <h5 v-model="orderId">訂單編號:{{orderId}}</h5>
+            <div class="row">
+                <div class="col"><p class="text-muted"></p></div>
+                <div class="col text-right"><p class="text-muted"></p></div>
+            </div>
+
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>商品名稱</th>
+                            <th>數量</th>
+                            <th>小計</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in productOrder.items">
+                            <td v-model="productName">{{item.product.productName}}</td>
+                            <td v-model="qty">{{item.qty}}</td>
+                            <td v-model="subTotal">{{formatCurrency(item.subTotal)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-right pr-5">
+                    <p style="padding-right:12px" v-model="total">總計：{{productOrder.total}}</p>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-7">
+                    <p v-model="receiver">收貨人姓名：{{productOrder.receiver}}</p>
+                    <p v-model="mobile">收貨人電話：{{productOrder.mobile}}</p>
+                    <p v-model="address">收貨人地址：{{productOrder.address}}</p>
+                </div>
+                <div class="col-5">
+                    <div class="row">
+                        <p class="col-3">立即付款：</p>
+                        <div class="col-9">
+                            <div class="w-75" id="payment-button">
+                                <button type="submit" class="btn btn-primary btn-block" @@click="Ecpay()" id="payForm"
+                                        targe="_blank">
+                                    <i class="fa fa-credit-card"></i>&nbsp;信用卡付款
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <p></p>
+    </div>
+    @section Scripts{
+        <script src="https://unpkg.com/vue@next"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/axios.min.js"></script>
+        <script>
+            var webApiBaseUri = "https://localhost:7150";
+            var app = {
+                data() {
+                    return {
+                        productOrder: [],
+                        orderId: 0,
+                        productName: '',
+                        qty: 0,
+                        subTotal: 0,
+                        receiver: '',
+                        mobile: '',
+                        address: '',
+                        total: 0,
+                        paymentForm: '',
+                    };
+                },
+                mounted: function (event) {
+                    let _this = this;
+                    _this.getProductOrder();
+                },
+                methods: {
+                    formatCurrency(value) {
+                        return value.toLocaleString('zh-TW', {
+                            style: 'currency', currency: 'TWD', minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                        });
+                    },
+                    getProductOrder() {
+                        let _this = this;
+                        axios.get(`${webApiBaseUri}/api/Order`, { withCredentials: true, })
+                            .then(response => {
+                                _this.productOrder = response.data;
+                                _this.productOrder.total = _this.formatCurrency(_this.productOrder.total);
+                                _this.orderId = response.data.orderId;
+                                _this.total = response.data.total;
+                                ;
+                            }
+                            )
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                    },
+                    Ecpay() {
+                        let _this = this;
+                        var ItemsName = [];
+                        for (var i = 0; i < _this.productOrder.items.length; i++) {
+                            ItemsName.push(_this.productOrder.items[i].product.productName);
+                        }
+                        var Order = {
+                            orderId: _this.orderId,
+                            total: parseInt(_this.total.replace(/[^0-9]/g, '')),
+                            itemsName: ItemsName,
+                        }
+                        axios.post(`${webApiBaseUri}/api/Ecpay`, Order, { withCredentials: true, })
+                            .then(response => {
+
+                                _this.paymentForm = response.data;
+                                const formContainer = document.createElement('div')
+                                formContainer.innerHTML = _this.paymentForm
+                                document.body.appendChild(formContainer)
+                                const form = formContainer.querySelector('form')
+                                form.submit()
+
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                    }
+
+                }
+            }
+            Vue.createApp(app).mount('#app')
+        </script> 
+    }
+</body>
+</html>

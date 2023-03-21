@@ -1,0 +1,536 @@
+﻿
+
+
+<style>
+
+    .progressbar {
+        counter-reset: step;
+    }
+
+        .progressbar li {
+            list-style-type: none;
+            width: 25%;
+            float: left;
+            font-size: 12px;
+            position: relative;
+            text-align: center;
+            text-transform: uppercase;
+            color: #7d7d7d;
+        }
+
+            .progressbar li:before {
+                width: 30px;
+                height: 30px;
+                content: counter(step);
+                counter-increment: step;
+                line-height: 30px;
+                border: 2px solid #7d7d7d;
+                display: block;
+                text-align: center;
+                margin: 0 auto 10px auto;
+                border-radius: 50%;
+                background-color: white;
+            }
+
+            .progressbar li:after {
+                width: 100%;
+                height: 2px;
+                content: '';
+                position: absolute;
+                background-color: #7d7d7d;
+                top: 15px;
+                left: -50%;
+                z-index: -1;
+            }
+
+            .progressbar li:first-child:after {
+                content: none;
+            }
+
+            .progressbar li.active {
+                color: green;
+            }
+
+                .progressbar li.active:before {
+                    border-color: #55b776;
+                }
+
+                .progressbar li.active + li:after {
+                    background-color: #55b776;
+                }
+
+    .btn {
+        border: 1px solid #000;
+        padding: 10px;
+        background-color: #fff;
+        color: #000;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        display: inline-block;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.3s ease-in-out;
+        /* 加入 hover 過渡效果 */
+    }
+
+        .btn:hover {
+            background-color: #000;
+            color: #fff;
+            border-color: #fff;
+        }
+
+    /* 設置 Modal 背景 */
+    .modal {
+        display: none;
+        /* 預設隱藏 */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        /* 半透明黑色背景 */
+        z-index: 9999;
+    }
+
+    /* 設置 Modal 視窗 */
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        text-align: center;
+    }
+
+    /* 設置關閉按鈕 */
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        color: #aaa;
+        cursor: pointer;
+    }
+
+    /* 設置輸入框和按鈕 */
+    input[type=text] {
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        margin-bottom: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+
+    button[type=submit] {
+        padding: 10px;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+    }
+
+    .star::before {
+        content: "*";
+        color: red
+    }
+</style>
+
+
+
+<div class="container" style="font-size:20px">
+    <div>
+        <p>　</p>
+        <ul class="progressbar">
+            <li class="active">購物車</li>
+            <li class="active">訂單資料</li>
+            <li>建立訂單</li>
+            <li>訂單完成</li>
+        </ul>
+        <p>　</p>
+        <p>　</p>
+    </div>
+    <div id="app">
+        <div class="row">
+            <div class="col-6">
+                <div class="card ">
+                    <div class="card-body">
+                        <h5 class="card-title star">送貨方法</h5>
+                        <div class="form-group">
+                            <input type="radio" name="ShippingMethod" id="ShippingMethod1" value="1"
+                                   v-model="ShippingMethod" @@blur="validateShippingMethod" />
+                            <label for="ShippingMethod1" class="control-label">宅配</label>
+                        </div>
+                        <span class="text-danger" v-if="ShippingMethodError">{{ShippingMethodError}}</span>
+                    </div>
+                </div>
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <h5 class="card-title star">付款方法</h5>
+                        <div class="form-group">
+                            <input type="radio" name="PaymentMethod" id="PaymentMethod" value="1"
+                                   v-model="PaymentMethod" @@blur="validatePaymentMethod" />
+                            <label for="PaymentMethod" class="control-label">信用卡</label>
+                        </div>
+                        <span class="text-danger" v-if="PaymentMethodError">{{PaymentMethodError}}</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">收貨人資料</h5>
+                        <div class="form-group ">
+                            <label for="ReceiverName" class="control-label star">收件人姓名</label>
+                            <input name="ReceiverName" class="form-control" v-model="Receiver" placeholder="請填寫真實姓名"
+                                   @@blur="validateReceiver" />
+                            <span class="text-danger" v-if="ReceiverError">{{ReceiverError}}</span>
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="ReceiverPhone" class="control-label star">收件人電話</label>
+                            <input name="ReceiverPhone" class="form-control" v-model="Mobile" id="ReceiverPhone"
+                                   @@blur="validateReceiverPhone" placeholder="請填入正確電話格式 例如:09xxxxxxxx" />
+                            <span class="text-danger" v-if="MobileError">{{MobileError}}</span>
+                        </div>
+
+                        <div class="form-group  mb-3 row ">
+                            <div class="col-6">
+                                <label class="control-label star">城市</label>
+                                <select class="form-control" v-model="selectedCity" @@change="loadDistricts">
+                                    <option value="">請選擇城市</option>
+                                    <option v-for="city in allArea" :value="city.CityName">{{city.CityName}}</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="control-label star">區域</label>
+                                <select class="form-control" v-model="selectedDistrict">
+                                    <option value="">請選擇區域</option>
+                                    <option v-for="district in districts" :value="district.AreaName">
+                                        {{district.AreaName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label star" style="padding:0px">地址</label>
+                            <input name="ReceiverAddress" class="form-control" v-model="Address" id="ReceiverAddress"
+                                   @@blur="validateReceiverAddress" placeholder="請填寫真實地址">
+                            <span class="text-danger" v-if="AddressError">{{AddressError}}</span>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-6">
+                                <label class="btn " style="padding-left:56px;padding-right:56px;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <i class="fa fa-circle-o fa-fw"></i>折扣代碼
+                                </label>
+                            </div>
+                            <div class="col-6 d-flex align-items-center">
+                                <h5>總計:{{formatCurrency(cartItemsDtos.total-couponAmount)}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container d-flex justify-content-center">
+                <p class=" justify-content-end " style="margin-top:15px;">
+                    <a class="btn btn-primary text-white "
+                       style="padding-left:56px;padding-right:56px;margin-right:56px" asp-action="firstStepIndex">返回購物車</a>
+                    <a class="btn btn-primary  text-white " style="padding-left:56px;padding-right:56px;"
+                       @@click="checkOut()">送出訂單</a>
+                </p>
+            </div>
+            <!-- 彈出的 Modal 視窗 -->
+            @* <div id="modal" class="modal">
+            <div class="modal-content">
+            <span class="close" @@click="cancel()">&times;</span>
+            <h2>輸入折扣碼</h2>
+            <form>
+            <input type="text" placeholder="請輸入折扣碼" v-model="couponCode">
+            <button type="button" class="btn" @@click="checkCoupon()">送出</button>
+            </form>
+            </div>
+            </div>*@
+            <!-- Button trigger modal -->
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="ml-auto">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <h2>輸入折扣碼</h2>
+                            <form>
+                                <input type="text" placeholder="請輸入折扣碼" v-model="couponCode">
+                                <button type="button" class="btn" @@click="checkCoupon()">送出 </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        var webApiBaseUri = "https://localhost:7150";
+        var app =
+        {
+            data() {
+                return {
+                    couponCode: null,
+                    Receiver: null,
+                    Mobile: null,
+                    Address: null,
+                    ShippingMethod: 0,
+                    PaymentMethod: 0,
+                    ReceiverError: null,
+                    MobileError: null,
+                    AddressError: null,
+                    cities: [],
+                    districts: [],
+                    selectedCity: null,
+                    selectedDistrict: null,
+                    allArea: [],
+                    fullAddress: null,
+                    cartItemsDtos: [],
+                    couponAmount: 0,
+                    ShippingMethodError: null,
+                    PaymentMethodError: null,
+                };
+            },
+            mounted() {
+                let _this = this;
+                _this.loadCities();
+                _this.getCartItems();
+
+            },
+            methods: {
+                formatCurrency(value) {
+                    return value.toLocaleString('zh-TW', {
+                        style: 'currency', currency: 'TWD', minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                    });
+                },
+                UseMemberCoupon: function (couponcode) {
+                    //alert("couponcode");
+                    let _this = this;
+                    var request = {};
+                    //request.MemberCouponId=id;
+                    //request.MemberId = memberId ;
+                    //request.CouponId = id;
+                    request.UsedCoupon = true;
+                    request.Status = false;
+                    request.Qty = null;
+                    axios.post(`${webApiBaseAddr}/api/MemberCoupons/UseMemberCoupon?couponcode=${couponcode}`, request, { withCredentials: true, }).then(response => {
+                        //alert(response.data);
+                        //window.location = "/Home/VueEmployeeService";
+                    });
+                },
+                getCartItems() {
+                    let _this = this;
+                    axios.get(`${webApiBaseUri}/api/Carts`, { withCredentials: true, })
+                        .then(response => {
+                            _this.cartItemsDtos = response.data;
+                            if (_this.cartItemDtos.item.length == 0) {
+                                _this.cartIsEmpty = "購物車內沒有商品";
+                            }
+                        })
+                        .catch(
+                            error => {
+                                console.log(error);
+                            }
+                        )
+                },
+                loadCities() {
+                    let _this = this;
+                    var AllLocationUrl = "https://raw.githubusercontent.com/donma/TaiwanAddressCityAreaRoadChineseEnglishJSON/master/CityCountyData.json";
+                    axios.get(`${AllLocationUrl}`)
+                        .then(response => {
+                            _this.allArea = response.data;
+                        })
+                        .catch(
+                            error => {
+                                console.log(error);
+                            }
+                        )
+                },
+                loadDistricts() {
+                    let _this = this;
+                    if (_this.selectedCity != null) {
+                        let selectedCityObj = _this.allArea.find(city => city.CityName === _this.selectedCity);
+                        _this.districts = selectedCityObj.AreaList
+                    }
+
+                },
+                validateReceiver() {
+                    let _this = this;
+                    const nameReg = /^[\u4e00-\u9fa5]{2,7}$/;
+                    if (_this.Receiver == null || _this.Receiver == '') {
+                        _this.ReceiverError = '請輸入收件人姓名';
+                    } else if (!nameReg.test(_this.Receiver)) {
+                        _this.ReceiverError = '請輸入正確的姓名格式';
+                    } else {
+                        _this.ReceiverError = null;
+                    }
+                },
+                validateReceiverPhone() {
+                    let _this = this;
+                    const phoneReg = /^09\d{2}-?\d{3}-?\d{3}$/;
+                    if (_this.Mobile == null || _this.Mobile == '') {
+                        _this.MobileError = '請輸入收件人電話';
+                    } else if (!phoneReg.test(_this.Mobile)) {
+                        _this.MobileError = '請輸入正確的電話格式';
+                    } else {
+                        _this.MobileError = null;
+                    }
+                },
+                validateReceiverAddress() {
+                    let _this = this;
+
+                    if (_this.Address == null || _this.Address == '') {
+                        _this.AddressError = '請輸入收件人地址';
+                    } else {
+                        _this.AddressError = null;
+                    }
+                },
+                validateShippingMethod() {
+                    let _this = this;
+                    if (_this.ShippingMethod == 0) {
+                        _this.ShippingMethodError = '請選擇運送方式';
+                    } else {
+                        _this.ShippingMethodError = null;
+                    }
+                },
+                validatePaymentMethod() {
+                    let _this = this;
+                    if (_this.PaymentMethod == 0) {
+                        _this.PaymentMethodError = '請選擇付款方式';
+                    } else {
+                        _this.PaymentMethodError = null;
+                    }
+                },
+                showModal() {
+                    $('#modal').modal('show');
+
+                },
+                cancel() {
+                    $('#modal').modal('hide');
+                },
+                checkCoupon() {
+                    let _this = this;
+                    var request = '';
+                    request = _this.couponCode;
+                    axios.post(`${webApiBaseUri}/api/Carts/couponCode`, {
+                        couponCode: request
+                    }, { withCredentials: true, })
+                        .then(response => {
+                            _this.couponAmount = response.data;
+                            if (_this.couponAmount == 0) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: `無此優惠碼`,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                _this.couponCode = "";
+                            } else {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: `本次使用${response.data}元`,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            }
+                            $('#exampleModal').modal('hide');
+                        })
+                        .catch(error => {
+
+                            alert(response.data)
+                            console.log(error);
+                        });
+                },
+                checkOut() {
+
+                    let _this = this;
+                    _this.fullAddress = _this.selectedCity + _this.selectedDistrict + _this.Address;
+                    var orderShippingPaymentInfo = {
+                        Receiver: _this.Receiver,
+                        Mobile: _this.Mobile,
+                        Address: _this.fullAddress,
+                        ShippingMethod: _this.ShippingMethod,
+                        PaymentMethod: _this.PaymentMethod,
+                    };
+                    var couponCode = {
+                        DiscountCode: _this.couponCode,
+                    };
+                    var orderInfo = {
+                        orderShippingPaymentInfo,
+                        couponCode
+                    };
+                    axios.post(`${webApiBaseUri}/api/Carts/checkout`, orderInfo, { withCredentials: true, })
+                        .then(response => {
+                            if (response.data == "訂單建立成功") {
+
+
+
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: `${response.data}`,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                setTimeout((() => window.location.href = '/Cart/thirdStepIndex'), 1500)
+
+                                if (_this.couponCode == null || _this.couponCode=="") {
+                                    return;
+                                }
+                                var request = {};
+                                request.UsedCoupon = true;
+                                request.Status = false;
+                                request.Qty = null;
+                                axios.post(`${webApiBaseAddr}/api/MemberCoupons/UseMemberCoupon?couponcode=${_this.couponCode}`, request, { withCredentials: true, }).then(response => {
+
+                                    //window.location = "/Home/VueEmployeeService";
+                                });
+
+                            }
+                            else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: `${response.data}`,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            alert(response.data)
+                            console.log(error);
+                        });
+
+                }
+
+            }
+        }
+
+        Vue.createApp(app).mount('#app')
+    </script>
+    }
+

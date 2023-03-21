@@ -1,0 +1,468 @@
+﻿@section Styles
+    {
+    <style>
+        .btnscroll {
+            position: fixed;
+            bottom: 60px;
+            right: 60px;
+        }
+        .color-grow {
+            background-color: #ecf9ff;
+            color: #2e96a9;
+            border: 1px solid #72bbc8;
+        }
+        .color-ligation {
+            background-color: #fff0e0;
+            border: 1px solid #ffac53;
+            color: #ed810e;
+        }
+        .color-color {
+            background-color: #efede7;
+            border: 1px solid #afa896;
+            color: #7e755c;
+        }
+        .img {
+            position: relative;
+            width: 500px;
+        }
+
+        .img img {
+                width: 100%;
+            }
+        .w520px {
+            width: 520px;
+        }
+
+        .h60px {
+            height: 60px;
+        }
+
+        .h100px {
+            height: 115px;
+        }
+
+        .title {
+            color: #2e96a9;
+            font-weight: bolder;
+        }
+
+        .object-fit-contain {
+            object-fit: contain;
+        }
+
+        .imgscale img {
+            transition: all 0.2s;
+        }
+
+        .imgscale:hover img {
+            transform: scale(1.1);
+        }
+
+        .touchcard:hover {
+            background: #416898;
+        }
+
+        .touchcard:hover .touchcardtext {
+            color: white;
+        }
+
+         .specifyColor {
+            accent-color: #2e96a9;
+        }
+        .touchcard:hover .touchcardbutton {
+            background-color: red;
+            color:white;
+        }
+        .h180px{
+             height: 180px;
+        }
+
+        .nowrap {
+            white-space: nowrap;
+        }
+
+        .ellipsis {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .c-toolBar__arrow i {
+            font-size: 20px;
+        }
+
+        .c-toolBar__box--top {
+            margin-top: 16px;
+        }
+
+        .c-toolBar__box {
+            background-color: #c7c7c7;
+            border: 1px solid #4f4f4f;
+            border-radius: 8px;
+            position: relative;
+            text-align: center;
+            width: 64px;
+            z-index: 2;
+        }
+    </style>
+}
+
+<div id="app">
+        
+    <div class="container" style=" display:flex;justify-content:center; align-items: center; margin:auto;">
+		<div class="row" >
+			<aside class="d-flex col-md-3" style="width:auto;height:1000px;">
+				<div class="card mt-4 ">
+					<article class="filter-group">
+						<header class="card-header">
+							<a href="#" data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+								<i class="icon-control fa fa-chevron-down"></i>
+								<h6 class="title">刊登尋找</h6>
+							</a>
+						</header>
+						<div class="filter-content collapse show" id="collapse_1">
+							<div class="card-body">
+								<div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search" id="title" v-model="AdoptTitle">
+									<div class="input-group-append">
+                                        
+									</div>
+								</div>
+							</div> <!-- card-body.// -->
+						</div>
+					</article> <!-- filter-group  .// -->
+					
+					<article class="filter-group">
+						<header class="card-header">
+							<a href="#" data-toggle="collapse" data-target="#collapse_2" aria-expanded="true" class="">
+								<i class="icon-control fa fa-chevron-down"></i>
+								<h6 class="title">物種 </h6>
+							</a>
+						</header>
+						<div class="filter-content collapse show" id="collapse_2">
+							<div class="card-body">
+								<label class="custom-control custom-radio">
+                                    <input type="radio" checked="" class="custom-control-input" name="type" v-model="type" value="" @@click="{{getUrl()}}">
+									<div class="custom-control-label">
+										全部物種
+									</div>
+								</label>
+								<label class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input specifyColor" name="type" v-model="type" value="貓" @@click="getUrl">
+									<div class="custom-control-label">
+										貓
+									</div>
+								</label>
+								<label class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input specifyColor" name="type" v-model="type" value="狗" @@click="getUrl">
+									<div class="custom-control-label">
+										狗
+									</div>
+								</label>
+
+							</div> <!-- card-body.// -->
+						</div>
+					</article>
+                    <article class="filter-group">
+                        <header class="card-header">
+                            <a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+                                <i class="icon-control fa fa-chevron-down"></i>
+                                <h6 class="title">性別 </h6>
+                            </a>
+                        </header>
+                        <div class="filter-content collapse show" id="collapse_3">
+                            <div class="card-body">
+                                <label class="custom-control custom-radio">
+                                    <input type="radio" checked="" class="custom-control-input" name="gender" v-model="gender" value="" @@click="getUrl">
+                                    <div class="custom-control-label">
+                                        全部
+                                    </div>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input specifyColor" name="gender" v-model="gender" value="公" @@click="getUrl">
+                                    <div class="custom-control-label ">
+                                        公
+                                    </div>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input specifyColor" name="gender" v-model="gender" value="母" @@click="getUrl">
+                                        <div class="custom-control-label ">
+                                        母
+                                    </div>
+                                </label>
+
+                            </div> <!-- card-body.// -->
+                        </div>
+                    </article>
+					<article class="filter-group">
+						<header class="card-header">
+							<a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
+								<i class="icon-control fa fa-chevron-down"></i>
+								<h6 class="title">刊登類型 </h6>
+							</a>
+						</header>
+						<div class="filter-content collapse show" id="collapse_3">
+                            <div class="card-body" >
+                                <label class="custom-control custom-radio">
+                                        <input type="radio" checked="" class="custom-control-input specifyColor" name="postType" v-model="postType" value="" @@click="getUrl">
+                                    <div class="custom-control-label">
+                                        全部
+                                    </div>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input specifyColor" name="postType" v-model="postType" value="認養" @@click="getUrl">
+                                    <div class="custom-control-label">
+                                        認養
+                                    </div>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input specifyColor" name="postType" v-model="postType" value="協尋" @@click="getUrl">
+                                    <div class="custom-control-label">
+                                        協尋
+                                    </div>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input specifyColor" name="postType" v-model="postType" value="拾獲" @@click="getUrl">
+                                    <div class="custom-control-label">
+                                        拾獲
+                                    </div>
+                                </label>
+                            </div> <!-- card-body.// -->
+                            
+						</div>
+                        <footer class="card-footer  mb-0 pb-0">
+                                <button style="display: flex;justify-content:center; align-items: center; margin:auto;" id="btntest" class="btn btn-light " type="button" @@click="getUrl()">
+                                    篩選
+                                </button>
+                        </footer>
+					</article>
+				</div> <!-- card.// -->
+
+			</aside>
+            <div class="justify-content-center col-md-9 mt-4" sstyle="padding-left:15px;">
+				<table class="table " style="border-spacing:2px; border-collapse: separate;">
+                <tr>
+                            <th class="text-center col-4" style=" background-color: #f0f1f4;border-top-left-radius: 10px;
+                    border-bottom-left-radius: 10px;
+                    padding: 10px 30px; color: #7F8A8E;">圖片</th>
+                            <th class=" text-center col-8" style=" border-top-right-radius: 10px;
+                    background-color: #f0f1f4;
+                    border-bottom-right-radius: 10px; padding: 10px 30px;color: #7F8A8E;">刊登資訊</th>
+                </tr>
+                </table>
+                    <div class="justify-content-center mt-4" id="add"></div>
+			</div>
+
+		</div>
+
+            <div class="btn btnscroll" style=" background-color: #fff; border: 1px solid #c7c7c7;">
+                    <i class="fa-solid fa-chevron-up"></i>  
+                @*<span>Top</span>*@
+            </div>
+        
+         </div>
+</div>
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+@*    <script src="http://code.jquery.com/jquery-latest.min.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+             integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        let title="";
+        let postType = "";
+        let gender="";
+        let color="";
+        let size="";
+        let areaAddress="";
+        let type="";
+        let filterUrl = `https://localhost:7150/api/Adoptions/Filter?title=${title}&&postType=${postType}&&gender=${gender}&&color=${color}&&type=${type}&&size=${size}&&areaAddress=${areaAddress}`;
+
+        let bodyHeight = $("body").height();
+        let winheight = $(window).height();
+        $(window).scroll(function () {
+            let scrollNowTop = $(this).scrollTop();//目前scroll的距離上方的位置
+            let scrollpercent =
+                Math.round(scrollNowTop / ((bodyHeight - winheight)) * 100) + "%";
+            $(".progress-percent").css("width", scrollpercent);
+            //把.progress-percent樣式css加上width的百分比
+        })
+        //頁面滑到最上面
+        $(".btnscroll").click(function () {
+            $("html,body").animate({
+                scrollTop: 0,
+            }
+                , 900
+            )
+        });
+
+        $("#btntest").click(function () {
+
+                title = $("#title").val();
+                postType = $("[name='postType']:checked").val();
+                gender = $("[name='gender']:checked").val();
+                type = $("[name='type']:checked").val();
+                console.log(postType);
+                console.log(title);
+                filterUrl = `https://localhost:7150/api/Adoptions/Filter?title=${title}&&postType=${postType}&&gender=${gender}&&color=${color}&&type=${type}&&size=${size}&&areaAddress=${areaAddress}`;
+                $("#add").children().remove();
+                $.ajax({
+                    type: "Get",
+                    //data:{
+                    //    title:"",
+                    //},
+                    //url: "https://localhost:7150/api/Adoptions/Filter",
+                    url: filterUrl,
+                    data:
+                    {
+                        title: "",
+                        postType: "",
+                        gender: "",
+                        color: "",
+                        size: "",
+                        areaAddress: "",
+                        type: "",
+                    },
+                    methods: {
+                        getUrl: function () {
+                            alert(title);
+                            filterUrl = `https://localhost:7150/api/Adoptions/Filter?title=${this.title}&&postType=${this.postType}&&gender=${this.gender}
+                                                                        &&color=${this.color}&&type=${this.type}&&size=${this.size}&&areaAddress=${this.areaAddress}`;
+                            return filterUrl;
+                        }
+                    },
+                    success: function (data) {
+                        console.log(data)
+                        var len = 50;
+                        //titleclick(title);
+                        //把每個card渲染出來
+                        for (let i = 0; i < data.length; i++) {
+                            let stringHtml = toHtmlString(data[i].adoptionId, data[i].image1,
+                                data[i].adoptTitle, data[i].postType, data[i].type,
+                                data[i].areaAddress, data[i].adoptDescription, data[i].gender);
+                            $("#add").append(stringHtml);
+                            $(".JQellipsis").each(function (i) {
+                                if ($(this).text().length > len) {
+                                    $(this).attr("title", $(this).text());
+                                    var text = $(this).text().substring(0, len - 1) + "...";
+                                    $(this).text(text);
+                                }
+                            });
+                        }
+
+                    },
+                    error: function () {
+                        alert('失敗');
+                    }
+                });
+          
+
+            });
+            
+            function toHtmlString(adoptionId, image1, adoptTitle, postType, type, areaAddress, adoptDescription,gender) {
+                let imagePath = '/AdoptionImages/';
+                //let url = 'https://localhost:44317/PetSite36/AdoptDetail?id=';
+                let url = 'https://localhost:7180/PetSite36/AdoptDetail?id=';
+                let htmlString = `
+                                                         <div class="card mb-3" style="max-width: 100%;max-height:250px;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4 img p-0" >
+                                                         <img src="${imagePath}${image1}" class="m-0 p-0 d-block object-fit-contain " style="object-fit:cover;height:250px" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                             <a href="${url}${adoptionId}">
+                                                <h5 class="card-title">${adoptTitle}</h5>
+                                             </a>
+                                             <span class="color-color" style="border-radius:4px">${postType}</span>
+                                                         <span class="color-grow" style="border-radius:4px">${gender}</span>
+                                                                     <span class="color-ligation" style="border-radius:4px">${type}</span>
+                                                                    
+                                                                                <span>地址：${areaAddress}</span>
+                                                                        <p class="card-text JQellipsis">${adoptDescription}</p>
+                                                                <a href="${url}${adoptionId}">
+                                                        <button class="w-100 btn btn-primary touchcardbutton">聯繫</button>
+                                                    </a>
+                                                <p class="card-text"><small class="text-muted"></small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                    `;
+            return htmlString;
+        }
+            //function filterkind(AdoptTitle, AnimalColor, Gender, Size, Type, PostType) {
+            //    let filterUrl = "https://localhost:7150/api/Adoptions/Filter?title=${title}?postType=${postType}&gender=${gender}&color=${color}&type=${type}&size=${size}&areaAddress=${areaAddress}";
+            //    return filterUrl;
+            //};
+            
+            $.ajax({
+                type: "Get",
+                //data:{
+                //    title:"",
+                //},
+                //url: "https://localhost:7150/api/Adoptions/Filter",
+                url: filterUrl,
+                data:
+                 {
+                            title:"",
+                            postType : "",
+                            gender:"",
+                            color:"",
+                            size:"",
+                            areaAddress:"",
+                            type:"",
+                 },
+                xhrFields: {
+                    withCredentials: true
+                },
+                 methods:{
+                      getUrl:function(){
+                        alert(title);
+                              filterUrl = `https://localhost:7150/api/Adoptions/Filter?title=${this.title}&&postType=${this.postType}&&gender=${this.gender}
+                                                            &&color=${this.color}&&type=${this.type}&&size=${this.size}&&areaAddress=${this.areaAddress}`;
+                             return filterUrl;
+                       }, 
+                    //ellipsisText: function() {
+                    //    var len = 50;
+                    //    $(".JQellipsis").each(function (i) {
+                    //      if ($(this).text().length > len) {
+                    //        $(this).attr("title", $(this).text());
+                    //        var text = $(this).text().substring(0, len - 1) + "...";
+                    //        $(this).text(text);
+                    //      }
+                    //    });
+                    //  },
+                 },
+                success: function (data) {
+                    console.log(data)
+                    var len = 50;
+                    //titleclick(title);
+                    //把每個card渲染出來
+                    for (let i = 0; i < data.length; i++) {
+                        let stringHtml = toHtmlString(data[i].adoptionId,data[i].image1, 
+                            data[i].adoptTitle, data[i].postType, data[i].type, 
+                            data[i].areaAddress, data[i].adoptDescription,data[i].gender);
+                        $("#add").append(stringHtml);
+                        $(".JQellipsis").each(function (i) {
+                            if ($(this).text().length > len) {
+                                $(this).attr("title", $(this).text());
+                                var text = $(this).text().substring(0, len - 1) + "...";
+                                $(this).text(text);
+                            }
+                        });
+                    }
+
+                },
+                error: function () {
+                    alert('失敗');
+                }
+            });
+
+            
+
+
+    </script>
+
+   
+}

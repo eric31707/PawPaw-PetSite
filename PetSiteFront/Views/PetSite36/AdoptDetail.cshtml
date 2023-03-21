@@ -1,0 +1,186 @@
+﻿
+<div id="app" class="container">
+
+    <div class=" row mt-5 mb-5 g-0 row" style="display:flex;justify-content:center; align-items: center; margin:auto; width:1200px;">
+        <div class="d-flex col-4" style="width:400px; ">
+            <img :src="image1" alt="破" class="rounded-top-4" style="width:400px;">
+        </div>
+        <div class=" justify-content-center row mt-5 mb-5 g-0 col-8" style="">
+            <div class=" col-lg-6 col-xl-9">
+                <h3 class="fw-bold text-center">浪浪基本資訊</h3>
+                <h5 class="text-center fw-bold">{{adoptTitle}}</h5>
+                <span style="display:none">{{memberAccount}}</span>
+                <hr>
+                     <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>種類</th>
+                                    <td>{{type}}</td>
+                                </tr>
+                                <tr>
+                                    <th>身型</th>
+                                    <td>{{size}}</td>
+                                </tr>
+                                <tr>
+                                    <th>刊登類型</th>
+                                    <td>{{postType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>名字</th>
+                                    <td>{{adoptName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>花色</th>
+                                    <td>{{animalColor}}</td>
+                                </tr>
+                                <tr>
+                                    <th>性別</th>
+                                    <td>{{gender}}</td>
+                                </tr>
+                                <tr>
+                                    <th>地址</th>
+                                    <td>{{areaAddress}}</td>
+                                </tr>
+                                <tr>
+                                    <th>信箱</th>
+                                    <td>{{membermail}}</td>
+                                </tr>
+                            </tbody>
+                     </table>
+                <div>
+                    <button type="button" class="btn btn-primary" @@click="turnlist">回列表</button>
+                    @*<button type="button" class="btn btn-info" @@click="editdetail"> 編輯</button>*@
+                  @*  <div v-if="IsMember===true">
+                    </div>*@
+                    @*<div v-else="">
+                        <button type="button" class="btn btn-primary" @@click="turnlist">回列表</button>
+                    </div>*@
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+    <div class="card col-12 mb-3 p-0" style="width:1200px;">
+        <img src="https://localhost:7180/AdoptionImages/mmlove_animal.jpg" />
+    </div>
+    <div class="card col-12 m-1" style="width:1200px;">
+		<h4 class="fw-bold text-center m-3">浪浪敘述</h4>
+        <p class=" text-center m-1 p-2" v-html="adoptDescription"></p>
+        @*<p class=" text-center m-1 p-2" v-html="adoptDescription">{{adoptDescription}}</p>*@
+        
+    </div>
+</div>
+
+                        
+@section Scripts{
+         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+  <script>
+
+        var getUrlString = location.href;
+        var url = new URL(getUrlString);
+        const adoptionId = url.searchParams.get('id');
+        var loginAccount="";
+        var webApiBaseAddr = "https://localhost:7150/";
+        var vueApp = {
+            data() {
+                return {
+                    image1: "",
+                    Filter: "",
+                    //AdoptionDTOes: [],
+                    //adotionId: null,
+                    membermail: "",
+                    memberAccount:"",
+                    type: "",
+                    animalColor: "",
+                    size: "",
+                    adoptTitle: "",
+                    gender: "",
+                    areaAddress: "",
+                    adoptDescription: "",
+                    postType: "",
+                    adoptName: "",
+                    AdoptionDetailDTOs: [],
+                    selfPostDTO:[],
+                   
+                };
+            },
+            mounted: function () {
+                let _this = this;
+                _this.getAdoptionDetailDTOs();
+            },
+            methods: {
+                //IsMember:function(){
+                //    alert(_this.memberAccount);
+                //    let _this=this;
+                //axios.get(`${webApiBaseAddr}api/Adoptions/SelfPost`, { withCredentials: true, })
+                //        .then(response => {
+                        
+                //            //_this.selfPostDTO = response.data;
+                //            loginAccount = response.data[0].memberAccount;
+                //            console.log(loginAccount);
+                //        })
+                //        .catch(error => {
+                //            console.log(error);
+                //        });
+                
+                //    if (_this.memberAccount ==loginAccount)
+                //    {return true;}
+                //    else{
+                //        return false;
+                //    }
+                //},
+                //拿adoption details資料
+                getAdoptionDetailDTOs: function () {
+                    function removeTags(html) {
+                        var div = document.createElement("div");
+                        div.innerHTML = html;
+                        return div.textContent || div.innerText || "";
+                    };
+                    let _this = this;
+                    axios.get(`${webApiBaseAddr}api/Adoptions/${adoptionId}`)
+                        .then(response => {
+                            console.log(response.data);
+                            _this.AdoptionDetailDTOs = response.data;
+                            _this.image1 = "/AdoptionImages/" + response.data[0].image1;
+                            _this.adoptTitle = response.data[0].adoptTitle;
+                            _this.memberAccount=response.data[0].memberAccount;
+                            _this.membermail = response.data[0].membermail;
+                            _this.adoptDescription = response.data[0].adoptDescription;
+                            //_this.adoptDescription = removeTags(response.data[0].adoptDescription);
+                            _this.areaAddress = response.data[0].areaAddress;
+                            _this.gender = response.data[0].gender;
+                            _this.size = response.data[0].size;
+                            _this.type = response.data[0].type;
+                            _this.adoptName = response.data[0].adoptName;
+                            _this.postType = response.data[0].postType;
+                            _this.animalColor = response.data[0].animalColor;
+                            
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                },
+                
+                //需要注意要抓到MemberId
+                turnlist:function(){
+                    window.location.replace(`https://localhost:7180/PetSite36/AdoptionPage`)
+                   //window.location.replace(`https://localhost:44317/PetSite36/AdoptionPage`)
+                },
+                editdetail:function(){
+                    //alert(adoptionId);
+                    window.location.replace(`~/PetSite36/EditAdoption/?id=${adoptionId}`)
+                }
+
+            },
+
+        }
+        var app = Vue.createApp(vueApp).mount("#app");
+     </script>
+}

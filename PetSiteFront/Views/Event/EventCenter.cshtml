@@ -1,0 +1,583 @@
+﻿@section Styles
+	{
+	<style>
+		/* button被選中的顏色，使用bootstrap5nav-tabs */
+		.nav-tabs .nav-link.active {
+			color: blue;
+		}
+
+		/* button沒被選中的顏色，使用bootstrap5nav-tabs */
+		.nav-tabs .nav-link {
+			color: black;
+		}
+
+		a {
+			text-decoration: none; 
+		}
+
+		.star::before {
+			content: "*";
+			color: red
+		}
+
+		.badge {
+			background-color: gray;
+		}
+
+	</style>
+}
+<div class="container">
+<div id="app">
+
+
+	<div class="my-5">
+		<div class="row">
+			<img src="~/images/headimage.jpg" alt="" class="col-2" style="object-fit: cover;">
+			<h3 class="col-2">陳冠升</h3>
+
+			<a href="https://localhost:7180/Event/Create" class="col-3">
+				<button class="btn btn-success">發起活動</button>
+			</a>
+
+		</div>
+		<!-- Nav tabs -->
+		<div class="my-3">
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+
+				<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="home-tab" data-bs-toggle="tab" type="button"
+							v-on:click="NavBar(1)">
+						發起的活動({{createEventDto.length}})
+					</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="profile-tab" data-bs-toggle="tab" type="button"
+							v-on:click="NavBar(2)">
+						參加的活動({{joinEventDto.length}})
+					</button>
+				</li>
+
+			</ul>
+		</div>
+		<!-- 自己發起活動的table -->
+		<div class="d-flex justify-content-center row" v-if="navbarid=='1'">
+			<div class="col-12">
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>名稱</th>
+								<th>人數</th>
+									<th class="text-center">編輯</th>
+							</tr>
+						</thead>
+						<tbody>
+							<template v-if="emptyEvent.length!==0">
+								<tr v-for="(item,index) in createEventDto">
+									<th>{{index+1}}</th>
+									<td><a :href="item.eventHerf">{{item.title}}</a></td>
+									<td>{{item.eventApplicantsQTY}}</td>
+										<td class="text-center">
+										<button class="btn btn-primary me-2" data-bs-toggle="modal"
+												data-bs-target="#editStaticBackdrop"
+												v-on:click="GetOneEventForEdit(item.eventId)" style="color:white;">
+											編輯
+										</button>
+										<button class="btn btn-info me-2" data-bs-toggle="modal"
+												data-bs-target="#staticBackdrop"
+													v-on:click="EventReview(item.eventId,index)" style="color:white;">
+											審核
+										</button>
+										<button class="btn btn-danger"
+												v-on:click="EventDelete(item.eventId)">
+											刪除
+										</button>
+									</td>
+								</tr>
+							</template>
+							<template v-else>
+								<div class=" text-center mt-5">
+									<span>你還沒有發起活動呢</span>
+									<a href="http://www.google.com">快去發起活動</a>
+								</div>
+							</template>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<!-- 自己參加活動的table -->
+		<div class="d-flex justify-content-center row " v-else>
+			<div class="col-12">
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr style="text-align:center">
+								<th>#</th>
+								<th>名稱</th>
+								<th>審核狀態</th>
+								<th>編輯</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="(item,index) in joinEventDto" style="text-align:center">
+								<td>{{index+1}}</td>
+									<td class="red-link">
+										<a :href="item.eventHerf">{{item.title}}</a>
+									</td>
+								<td>{{item.status}}</td>
+								<td>
+									<button class="btn btn-danger" v-on:click="QuitEvent(item.eventId)">退出</button>
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+	<!-- 審核Modal -->
+	<div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+		 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="staticBackdropLabel">目前人數參加：{{modelTotal}}</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body modal-dialog-scrollable">
+
+
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>姓名</th>
+									<th>人數</th>
+									<th>寵物數量</th>
+									<th>審核</th>
+								</tr>
+							</thead>
+							<tbody>
+								<template v-if="whoJoinEventDto.length!==0">
+									<tr v-for="(item,index) in whoJoinEventDto">
+										<th>{{index+1}}</th>
+										<td>{{item.name}}</td>
+										<td>{{item.totalPeople}}</td>
+										<td>{{item.totalPet}}</td>
+										<td>
+											<template v-if="item.status==='未審核'">
+												<button class="btn btn-success me-2"
+														v-on:click="EventReviewAgree(item.memberId)">
+													同意
+												</button>
+												<button class="btn btn-danger"
+														v-on:click="EventReviewReject(item.memberId)">
+													拒絕
+												</button>
+											</template>
+											<template v-else-if="item.status==='審核通過'">
+												<p>已同意</p>
+											</template>
+											<template v-else>
+												<p>已拒絕</p>
+											</template>
+										</td>
+
+									</tr>
+								</template>
+								<template v-else>
+									<div class=" text-center mt-5">
+										<span>目前沒有人參加你的活動</span>
+									</div>
+								</template>
+
+							</tbody>
+						</table>
+					</div>
+
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</div>
+<!-- 編輯活動Modal -->
+<div class="modal fade" id="editStaticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+	 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="staticBackdropLabel">編輯活動</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+
+			<div class="modal-body">
+
+				<div class="card shadow-lg ">
+					<!-- control -->
+					<input type="text" class="form-control" id="EditEventId" hidden>
+					<div class="mb-3 ms-5 me-5">
+						<label for="Title" class="form-label mt-1 star">1.活動標題</label>
+						<input type="text" class="form-control" id="Title" placeholder="請輸入活動標題">
+					</div>
+
+					<div class="mb-3 ms-5 me-5">
+						<label for="formFile" class="form-label mt-1 star">2.活動類型</label>
+						<select id="EventsCategoryName" class="form-select" aria-label="Default select example">
+							<option selected value="狗">狗</option>
+							<option value="貓">貓</option>
+						</select>
+					</div>
+
+					<hr>
+
+					<div class="mb-3 ms-5 me-5">
+						<label for="formFile" class="form-label mt-1 star">3.報名開始日期</label>
+						<input id="ApplyTimeStart" type="datetime-local">
+					</div>
+
+					<div class="mb-3 ms-5 me-5">
+						<label for="formFile" class="form-label mt-1 star">4.報名截止日期</label>
+						<input id="ApplyTimeEnd" type="datetime-local">
+					</div>
+
+					<div class="mb-3 ms-5 me-5">
+						<label for="formFile" class="form-label mt-1 star">5.活動起始時間</label>
+						<input id="ProgressTimeStart" type="datetime-local">
+					</div>
+
+					<div class="mb-3 ms-5 me-5">
+						<label for="formFile" class="form-label mt-1 star">6.活動結束時間</label>
+						<input id="ProgressTimeEnd" type="datetime-local">
+					</div>
+
+					<hr>
+
+					<div class="mb-3 ms-5 me-5">
+						<label for="Image" class="form-label mt-1 star">7.上傳封面照片</label>
+						<input class="form-control" type="file" id="Image">
+					</div>
+					<img src="" id="preview">
+					<hr>
+
+					<div class="mb-3 ms-5 me-5">
+						<label for="Location" class="form-label mt-1 star">8.地點</label>
+						<input type="text" class="form-control" id="Location" placeholder="地點">
+					</div>
+
+					<div class="mb-3 ms-5 me-5">
+						<label for="ApplicantLimitedQTY" class="form-label mt-1 star">9.人數上限</label>
+						<input type="number" class="form-control" id="ApplicantLimitedQTY" placeholder="人數上限">
+					</div>
+
+					<div class="mb-3 ms-5 me-5">
+						<label for="EventInfo" class="form-label mt-1 star">10.活動詳情</label>
+						<textarea id="editor"></textarea>
+					</div>
+
+
+				</div>
+
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" id="EditEventSumbits">確認更改</button>
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+@section Scripts{
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+	  integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+		integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+		crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/axios.min.js"></script>
+	<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.3.min.js"
+		integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+	<script>
+
+		//初始化CKediotr5
+		ClassicEditor
+			.create(document.querySelector('#editor'), {
+			})
+			.then(editor => {
+				window.editor = editor;
+				console.log("ckeditor成功");
+			})
+			.catch(error => {
+				console.error(error);
+				console.log("ckeditor失敗");
+			});
+
+		const membermember = 2;
+		var webApiBaseAddr = "https://localhost:7150/";
+		var vueApp = {
+			data() {
+				return {
+					navbarid: 1,
+					name: '',
+					createEventDto: [],//自己創建的活動
+					joinEventDto: [],//自己參加的活動
+					whoJoinEventDto: [],//誰參加了我的活動
+					emptyEvent: false,//如果沒有活動
+					modelTotal: '',//審核model上面的標題 ex:20/50
+					touchIndex: 0,//目前點了第幾個 v-for裡的index
+					EventId: 0,//目前點了哪個活動
+
+				};
+			},
+			mounted: function () {
+				let _this = this;
+				_this.EventCenter();
+				_this.EventMyJoin();
+			},
+			methods: {
+				//查詢自己已發佈的活動
+				EventCenter: function () {
+					let _this = this;
+					//下面URl id=memberId
+					axios.get(`${webApiBaseAddr}api/Events/Release`, { withCredentials: true, })
+						.then(response => {
+							console.log('查詢自己已發佈的活動');
+							console.log(response.data);
+							//代表沒有舉辦過活動
+							if (response.data.length === 0) {
+								_this.emptyEvent = true;
+							}
+							_this.createEventDto = response.data;
+							console.log(_this.createEventDto);
+						})
+						.catch(error => {
+							console.log(error);
+						});
+				},
+				//NavBar切換，傳入id就顯示哪個NavBar id
+				NavBar: function (id) {
+					this.navbarid = id;
+					console.log(id);
+				},
+				//修改自己發布的活動
+				EventEdit: function (id) {
+					console.log(id + '編輯活動');
+				},
+				//刪除自己發布的活動
+				EventDelete: function (id) {
+					console.log(id + '刪除');
+					let _this = this;
+					var ret = confirm("確定要刪除嗎?")
+					if (ret == true) {
+						axios.delete(`${webApiBaseAddr}api/Events/DeleteEvent`, {
+							params: { eventId: id },
+							withCredentials: true,
+						})
+							.then(response => {
+								console.log(response.data);
+								_this.EventCenter();
+							})
+							.catch(error => {
+								console.log(error);
+							});
+					}
+				},
+				//查詢誰報名了我的活動
+				EventReview: function (id, index) {
+					let _this = this;
+					_this.touchIndex = index;
+					_this.EventId = id;
+					$('editStaticBackdrop').show();
+					// console.log(id + '審核');
+					axios.get(`${webApiBaseAddr}api/Events/WhoJoin?id=${id}`)
+						.then(response => {
+							console.log(response.data);
+							_this.whoJoinEventDto = response.data;
+							_this.modelTotal = _this.createEventDto[index].eventApplicantsQTY;
+						})
+						.catch(error => {
+							console.log(error);
+						});
+				},
+				//同意別人的活動申請
+				EventReviewAgree: function (id) {
+					console.log(id + '同意');
+					let _this = this;
+					let request = {};
+					request.EventId = _this.EventId;
+					request.MemberId = id;
+					request.Status = true;
+					axios.put(`${webApiBaseAddr}api/Events`, request)
+						.then(response => {
+							_this.EventCenter();
+							_this.EventMyJoin();
+							setTimeout(() => _this.EventReview(_this.EventId, _this.touchIndex), 100)
+						})
+						.catch(error => {
+							console.log(error);
+						});
+
+				},
+				//拒絕別人的活動申請
+				EventReviewReject: function (id) {
+					console.log(id + '拒絕');
+					let _this = this;
+					let request = {};
+					request.EventId = _this.EventId;
+					request.MemberId = id;
+					request.Status = false;
+					axios.put(`${webApiBaseAddr}api/Events`, request)
+						.then(response => {
+							_this.EventCenter();
+							_this.EventMyJoin();
+							_this.EventReview(_this.EventId, _this.touchIndex);
+						})
+						.catch(error => {
+							console.log(error);
+						});
+
+				},
+				//查看自己參加的活動
+				EventMyJoin: function () {
+					let _this = this;
+					axios.get(`${webApiBaseAddr}api/Events/Join`, { withCredentials: true, })
+						.then(response => {
+							_this.joinEventDto = response.data;
+						})
+						.catch(error => {
+							console.log(error);
+						});
+				},
+				//退出自己參加的活動
+				QuitEvent: function (eventId) {
+					let _this = this;
+					let request = {};
+					request.eventId = eventId;
+					var ret = confirm("確定要刪除嗎?");
+					if (ret == true) {
+						axios.delete(`${webApiBaseAddr}api/Events/DeleteJoin`, {
+							params: request,
+							withCredentials: true,
+						})
+							.then(response => {
+								console.log(response.data);
+								_this.EventMyJoin();
+								_this.EventCenter();
+							})
+							.catch(error => {
+								console.log(error);
+							});
+					}
+				},
+				//修改自己活動get
+				GetOneEventForEdit: function (EventId) {
+					let _this = this;
+
+					axios.get(`${webApiBaseAddr}api/Events/OneEvent/?eventId=${EventId}`, {
+						withCredentials: true,
+					})
+						.then(response => {
+							console.log(response.data);
+							document.querySelector('#EditEventId').value = EventId;
+							document.querySelector('#Title').value = response.data[0].title;
+							document.querySelector('#EventsCategoryName').value = response.data[0].eventsCategoryName;
+							document.querySelector('#ApplyTimeStart').value = response.data[0].applyTimeStart;
+							document.querySelector('#ApplyTimeEnd').value = response.data[0].applyTimeEnd;
+							document.querySelector('#ProgressTimeStart').value = response.data[0].progressTimeStart;
+							document.querySelector('#ProgressTimeEnd').value = response.data[0].progressTimeEnd;
+							document.querySelector('#preview').src = response.data[0].image;
+							document.querySelector('#Location').value = response.data[0].location;
+							document.querySelector('#ApplicantLimitedQTY').value = response.data[0].applicantLimitedQTY;
+							window.editor.setData(response.data[0].eventInfo);
+						})
+						.catch(error => {
+							console.log(error);
+						});
+				}
+
+			}
+
+		}
+		var app = Vue.createApp(vueApp).mount("#app");
+
+		//圖片預覽用的
+		const fileInput = document.querySelector('#Image');
+		const preview = document.querySelector('#preview');
+
+		fileInput.addEventListener('change', function () {
+			const file = fileInput.files[0];
+
+		
+
+			// 使用FileReader讀取文件
+			const reader = new FileReader();
+			reader.onload = function () {
+				preview.src = reader.result;
+			};
+			reader.readAsDataURL(file);
+		});
+
+		//確認更改活動;
+		document.querySelector('#EditEventSumbits').addEventListener('click', function () {
+			var data = new FormData();
+
+			if (document.querySelector("#Image").files.length > 0) {
+				data.append("Image", document.querySelector("#Image").files[0]);
+			}
+			data.append("EventId", document.querySelector("#EditEventId").value);
+			data.append("Title", document.querySelector("#Title").value);
+			data.append("EventsCategoryName", document.querySelector("#EventsCategoryName").value);
+			data.append("ApplyTimeStart", document.querySelector("#ApplyTimeStart").value);
+			data.append("ApplyTimeEnd", document.querySelector("#ApplyTimeEnd").value);
+			data.append("ProgressTimeStart", document.querySelector("#ProgressTimeStart").value);
+			data.append("ProgressTimeEnd", document.querySelector("#ProgressTimeEnd").value);
+			data.append("Location", document.querySelector("#Location").value);
+			data.append("ApplicantLimitedQTY", document.querySelector("#ApplicantLimitedQTY").value);
+			data.append("EventInfo", window.editor.getData());
+
+			$.ajax({
+				type: "PUT",
+				url: "https://localhost:7150/api/Events/PutEvent",
+				contentType: false,
+				processData: false,
+				data: data,
+				dataType: 'json',
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function (data) {
+					alert(data.name);
+					app.EventCenter();
+				},
+				error: function (data) {
+					alert(data.name);
+					console.log("失敗");
+				},
+
+			});
+
+
+		});
+
+	</script>
+
+}

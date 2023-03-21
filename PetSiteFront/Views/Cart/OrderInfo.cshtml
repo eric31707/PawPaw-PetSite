@@ -1,0 +1,115 @@
+﻿<div class="container" id="app">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>訂單編號</th>
+				<th>處理狀態</th>
+				<th>付款狀態</th>
+				<th>總計</th>
+			</tr>
+		</thead>
+		<tbody v-for="item in AllOrder">
+			<tr>
+				<td>{{item.orderId}}</td>
+				<td>{{item.shipmentStatus}}</td>
+				<td>{{item.paymentStatus}}</td>
+				<td>{{item.total}}</td>
+				<td>
+					<button class="btn btn-primary" type="button" @@click="showDetail(item.items)"
+							aria-expanded="false"
+							aria-controls="collapseExample1">
+						商品細項
+					</button>
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+	<!-- template -->
+	<div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+		 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+					@@click="cancel()">
+						<i class="fa-sharp fa-solid fa-xmark"></i>
+					</button>
+				</div>
+				<div class="modal-body modal-dialog-scrollable">
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>商品名稱</th>
+									<th>單價</th>
+									<th>數量</th>
+									<th>小計</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="item in ModalOrderItem">
+									<td>{{item.product.productName}}</td>
+									<td>{{item.product.price}}</td>
+									<td>{{item.qty}}</td>
+									<td>{{item.subTotal}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @@click="close()">關閉</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+@section Scripts{
+	<script>
+		var webApiBaseUri = "https://localhost:7150";
+		var app = {
+			data() {
+				return {
+					AllOrder: [],
+					ModalOrderItem: []
+				};
+			},
+			mounted: function (event) {
+				let _this = this;
+				_this.getAllProductOrder();
+			},
+			methods: {
+				getAllProductOrder() {
+					let _this = this;
+					axios.get(`${webApiBaseUri}/api/Order/AllOrder`,{withCredentials:true,})
+						.then(response => {
+							console.log(response.data);
+							_this.AllOrder = response.data;
+						})
+						.catch(
+							error => {
+								console.log(error);
+							}
+						)
+				},
+				showDetail(items) {
+					let _this = this;
+					_this.ModalOrderItem = items;
+					$('#staticBackdrop').modal('show');
+				},
+				close() {
+					$('#staticBackdrop').modal('hide');
+				}
+
+			}
+		}
+
+		Vue.createApp(app).mount('#app')
+	</script>
+}

@@ -1,0 +1,494 @@
+﻿@section Styles
+{
+	<style>
+		
+		.coupon-card {
+			background: linear-gradient(135deg, #7158fe, #9d4de6);
+			color: #fff;
+			text-align: center;
+			height:200px;
+			width:560px;
+			/*line-height:20px;*/
+			border-inline-width:400px;
+			padding: 40px 80px;
+			border-radius: 15px;
+			box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.15);
+			position: relative;
+		}
+
+		.coupon-card2 {
+			background: linear-gradient(135deg, #d2651b, #9d4de6);
+			color: #fff;
+			text-align: center;
+			height:200px;
+			width:560px;
+			/*line-height:20px;*/
+			border-inline-width:400px;
+			padding: 40px 80px;
+			border-radius: 15px;
+			box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.15);
+			position: relative;
+		}
+		.coupon-card3 {
+			background: linear-gradient(135deg, #d3e0dd, #9d4de6);
+			color: #fff;
+			text-align: center;
+			height:200px;
+			width:560px;
+			/*line-height:20px;*/
+			border-inline-width:400px;
+			padding: 40px 80px;
+			border-radius: 15px;
+			box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.15);
+			position: relative;
+		}
+
+		.coupon-card4 {
+			background: linear-gradient(135deg, #16332d, #ced9d6);
+			color: #fff;
+			text-align: center;
+			height: 200px;
+			width: 560px;
+			/*line-height:20px;*/
+			border-inline-width: 400px;
+			padding: 40px 80px;
+			border-radius: 15px;
+			box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.15);
+			position: relative;
+		}
+		.coupon-card h3 {
+			font-size: 25px;
+			font-weight: 400;
+			line-height: 20px;
+		}
+
+		.coupon-card p {
+			font-size: 15px;
+		}
+		
+		.coupon-row {
+			display: flex;
+			align-items: center;
+			margin: 25px auto;
+			width: fit-content;
+		}
+		
+		#cpnCode {
+			border: 1px dashed #fff;
+			padding: 10px 20px;
+			border-right: 0;
+			width:155px;
+			height:auto;
+		}
+		
+		#cpnBtn {
+			border: 1px solid #fff;
+			background: #fff;
+			padding: 10px 20px;
+			color: #7158fe;
+			cursor: pointer;
+			width: 125px;
+			height: 50px;
+		}
+		
+		.circle1,
+		.circle2 {
+			background: #fff;
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+		
+		.circle1 {
+			left: -25px;
+		}
+
+		.circle2 {
+			right: -25px;
+		}
+		/*------------*/
+		
+		.box2 {
+			display: inline-block;
+			/*width: 450px;
+			height: 100px;*/
+			margin: 2em;
+		}
+		
+		.nav-tabs .nav-link.active {
+			color: forestgreen;
+		}
+
+		
+		.nav-tabs .nav-link {
+			color: black;
+		}
+
+		a {
+			text-decoration: none
+		}
+	</style>
+}
+
+<div id="app" class="container">
+		<div class="my-3">
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="home-tab" data-bs-toggle="tab" type="button"
+						@@click="NavBar(1)">
+						所有折價券({{CouponDTOes.length}})
+					</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="profile-tab" data-bs-toggle="tab" type="button"
+						v-on:click="NavBar(2)">
+						未使用折價券({{MbCouponDTOes.length}})
+					</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link " id="profile-tab" data-bs-toggle="tab" type="button"
+						v-on:click="NavBar(3)">
+						已使用({{UsedMbCouponDTOes.length}})
+					</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="profile-tab" data-bs-toggle="tab" type="button"
+						v-on:click="NavBar(4)">
+						已過期({{ExpiredMbCouponDTOes.length}})
+					</button>
+				</li>
+
+			</ul>
+		</div>
+		<div class="">
+		<div v-if="navbarid=='1'" class="">
+			<div class="coupon-card box2 " v-for="item in CouponDTOes">
+				<div class="row">
+					<div class="col-4">
+							<h3 class="p-0" style="color:#fff;display:flex;height: 55px; font-size: 80px; align-items:center;">
+								{{item.discountAmount}}
+							</h3>
+							<hr />
+							<p class="mr-1">折價券：<br />{{item.discountName}}</p>
+					</div>
+					<div class="col-8">
+						<p>1、商城、旅店可用</p>
+						<p>2、過期作廢</p><span style="display:none">{{item.couponId}}</span>
+						<div class="coupon-row m-0 p-0">
+								<span id="cpnCode">{{item.discountCode}}</span>
+								<button class="btns" id="cpnBtn" @@click="exchangeCoupon(item.couponId)">
+								兌換
+							</button>
+						</div>
+						<p class="mt-1 p-0" style="font-size:9px;">使用期限：{{item.endDate}}</p>
+					</div>
+				</div>
+				<div class="circle1"></div>
+				<div class="circle2"></div>
+			</div>
+		</div>
+		<div v-else-if="navbarid=='2'" class="trythis">
+			<div class="coupon-card2 box2 " v-for="item in MbCouponDTOes">
+				<div class="row ">
+					<div class="col-4">
+						<h3 class="p-0" style="color:#fff;display:flex;height: 55px; font-size: 80px; align-items:center;">
+								{{item.discountAmount}}
+							</h3>
+							<hr />
+							<p class="mr-1">折價券：<br />{{item.discountName}}</p>
+					</div>
+					<div class="col-8">
+						<p>1、商城、旅店可用</p>
+						<p>2、過期作廢</p>
+						<div class="coupon-row m-0 p-0 usethis">
+								<span id="cpnCode" class="copycode">{{item.discountCode}}</span>
+								<span id="cpnBtn" class="copybtn" @@click="copyCode">複製折扣碼</span>
+							
+						</div>
+						<p class="mt-1 p-0" style="font-size:9px;">使用期限：{{item.endDate}}</p>
+					</div>
+				</div>
+				<div class="circle1"></div>
+				<div class="circle2"></div>
+			</div>
+		</div>
+		<div v-else-if="navbarid=='3'">
+			<div class="coupon-card3 box2" v-for="item in UsedMbCouponDTOes">
+				<div class="row">
+					<div class="col-4">
+						<h3 class="p-0" style="color:#fff;display:flex;height: 55px; font-size: 80px; align-items:center;">
+								{{item.discountAmount}}
+							</h3>
+							<hr />
+							<p class="mr-1">折價券：<br />{{item.discountName}}</p>
+					</div>
+					<div class="col-8">
+						<p>1、商城、旅店可用</p>
+						<p>2、過期作廢</p>
+						<div class="coupon-row m-0 p-0">
+								<span id="cpnCode">{{item.discountCode}}</span>
+								<span id="cpnBtn" >已使用</span>
+						</div>
+						<p class="mt-1 p-0" style="font-size:9px;">使用期限：{{item.endDate}}</p>
+					</div>
+				</div>
+				<div class="circle1"></div>
+				<div class="circle2"></div>
+			</div>
+		</div>
+		<div v-else="navbarid=='4'">
+			<div class="coupon-card4 box2" v-for="item in ExpiredMbCouponDTOes">
+				<div v-else-if="navbarid=='3'">
+					<div class="row">
+						<div class="col-4">
+							<h3 class="p-0" style="color:#fff;display:flex;height: 55px; font-size: 80px; align-items:center;">
+									{{item.discountAmount}}
+								</h3>
+								<hr />
+								<p class="mr-1">折價券：<br />{{item.discountName}}</p>
+						</div>
+						<div class="col-8">
+							<p>1、商城、旅店可用</p>
+							<p>2、過期作廢</p>
+							<div class="coupon-row m-0 p-0">
+									<span id="cpnCode">{{item.discountCode}}</span>
+									<span id="cpnBtn">已過期</span>
+							</div>
+							<p class="mt-1 p-0" style="font-size:9px;">使用期限：{{item.endDate}}</p>
+						</div>
+					</div>
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+</div>
+
+
+
+@section Scripts{
+	
+	@*<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+	  integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+*@
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://unpkg.com/vue@next"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/axios.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+	@*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>*@
+	<script>
+		
+		
+		var webApiBaseAddr = "https://localhost:7150";
+		var vueApp = {
+			data() {
+
+				return {
+					//Filter: "",
+					navbarid:1,
+					CouponDTOes: [],
+					MbCouponDTOes:[],
+					UsedMbCouponDTOes:[],
+					ExpiredMbCouponDTOes:[],
+					//memberCouponId:null;
+					//employeeId: null,
+					
+				};
+			},
+			
+			//mounted 初始化
+			mounted: function (event) {
+				let _this = this;
+				_this.getCouponDTOes();
+				_this.getMbCouponDTOes();
+				_this.getUsedMbCouponDTOes();
+				_this.getExpiredMbCouponDTOes();
+			},
+			methods: {
+				getCouponDTOes: function () {
+					//alert("getEmployeeDTOes");
+					
+					let _this = this;
+					axios.get(`${webApiBaseAddr}/api/Coupons`, { withCredentials: true, }).then(response => {
+						_this.CouponDTOes = response.data;
+						var couponList = [];
+						for (var i = 0; i < _this.CouponDTOes.length; i++) {
+							var item = {};
+							item = _this.CouponDTOes[i];
+							//item.Edit = false;
+							couponList.push(item);
+						}
+						_this.CouponDTOes = couponList;
+					});
+				},
+				getMbCouponDTOes: function () {
+					
+					//let memberId=1;
+					let _this = this;
+					axios.get(`${webApiBaseAddr}/api/MemberCoupons`, { withCredentials: true, }).then(response => {
+						_this.MbCouponDTOes = response.data;
+						var MbcouponList = [];
+						for (var i = 0; i < _this.MbCouponDTOes.length; i++) {
+							var item = {};
+							item = _this.MbCouponDTOes[i];
+							//item.Edit = false;
+							MbcouponList.push(item);
+						}
+						_this.MbCouponDTOes = MbcouponList;
+					});
+				},
+				//NavBar切換，傳入id就顯示哪個NavBar id
+				NavBar: function (id) {
+					this.navbarid = id;
+					console.log(id);
+				},
+				
+				copyCode:function(){
+					//document.querySelector('.trythis').addEventListener('click', function (event) {
+					//	if (event.target.classList.contains('copybtn')) {
+					//		const trythis = event.target.closest('.usethis'); // 找到最近的 .item 父元素
+					//		const copycode = trythis.querySelector('.copycode').textContent; // 取得該父元素中的 .copycode 文字內容
+					//		console.log(copycode); // 印出該元素中的 .copycode 值
+					//	}
+					//});
+					const btnCopy = document.querySelector('.trythis');
+
+					btnCopy.addEventListener('click', (event) => {
+						if (event.target.classList.contains('copybtn')) {
+							const codeEl = event.target.previousElementSibling;
+							const range = document.createRange();
+							range.selectNode(codeEl);
+							const selection = window.getSelection();
+							selection.removeAllRanges();
+							selection.addRange(range);
+							document.execCommand('copy');
+							selection.removeAllRanges();
+							Swal.fire({
+								icon: 'success',
+								title: `已複製折扣碼`,
+								showConfirmButton: false,
+								timer: 1500
+							});
+
+						}
+					});
+				},
+				getUsedMbCouponDTOes: function () {
+					//alert("getEmployeeDTOes");
+					//let memberId=1;
+					let _this = this;
+					axios.get(`${webApiBaseAddr}/api/MemberCoupons/Used`, { withCredentials: true, }).then(response => {
+						_this.UsedMbCouponDTOes = response.data;
+						var UsedMbCouponList = [];
+						for (var i = 0; i < _this.UsedMbCouponDTOes.length; i++) {
+							var item = {};
+							item = _this.UsedMbCouponDTOes[i];
+							//item.Edit = false;
+							UsedMbCouponList.push(item);
+						}
+						_this.UsedMbCouponDTOes = UsedMbCouponList;
+					});
+				},
+				getExpiredMbCouponDTOes: function () {
+					//alert("getExpiredMbCouponDTOes");
+					let _this = this;
+					
+					axios.get(`${webApiBaseAddr}/api/MemberCoupons/Expired`,{withCredentials:true,}).then(response => {
+						_this.ExpiredMbCouponDTOes = response.data;
+						var ExpiredMbCouponList = [];
+						for (var i = 0; i < _this.ExpiredMbCouponDTOes.length; i++) {
+							var item = {};
+							item = _this.ExpiredMbCouponDTOes[i];
+							//item.Edit = false;
+							ExpiredMbCouponList.push(item);
+						}
+						_this.ExpiredMbCouponDTOes = ExpiredMbCouponList;
+					});
+				},
+				//使用折價券的function @@click事件
+				//<button @@click="UseMemberCoupon(item.memberCouponId)">test</button>
+				UseMemberCoupon:function(id){
+					alert(id);
+					 let _this = this;
+                    var request = {};
+					request.MemberCouponId=id;
+					//request.MemberId = memberId ;
+					//request.CouponId = id;
+					request.UsedCoupon = true;
+					request.Status=false;
+					request.Qty=null;
+					axios.post(`${webApiBaseAddr}/api/MemberCoupons/UseMemberCoupon?MbCid=${id}`, request, { withCredentials: true, }).then(response => {
+									//alert(response.data);
+									//window.location = "/Home/VueEmployeeService";
+								}); 
+				},
+				exchangeCoupon:function(id){
+					
+					 let _this = this;
+                    var request = {};
+					request.MemberCouponId=0;
+					//request.MemberId = memberId ;
+					request.CouponId = id;
+					request.UsedCoupon = false;
+					request.Status=false;
+					request.Qty=null;
+					axios.post(`${webApiBaseAddr}/api/MemberCoupons`, request,{withCredentials:true,}).then(response => {
+						_this.getCouponDTOes();
+						_this.getMbCouponDTOes();
+						//window.location.reload();
+						//alert(response.data);
+									//window.location = "/Home/VueEmployeeService";
+								});
+					
+					//window.location.reload();
+					//_this.NavBar(2); 
+				},
+				//update: function (item) {
+				//	//alert("update");
+				//	let _this = this;
+				//	var request = {};
+				//	request.EmployeeId = item.employeeId;
+				//	request.FirstName = item.firstName;
+				//	request.LastName = item.lastName;
+				//	request.Title = item.title;
+				//	axios.put(`${webApiBaseAddr}/api/Employees/${item.employeeId}`, request).then(response => {
+				//		alert(response.data);
+				//		_this.filterEmployeeDTO();
+				//		_this.cancel();
+				//	});
+				//},
+				
+				//edit: function (employeeId) {
+				//	//alert("edit");
+				//	let _this = this;
+				//	var employeeList = [];
+				//	for (var i = 0; i < _this.EmployeeDTOes.length; i++) {
+				//		var item = {};
+				//		item = _this.EmployeeDTOes[i];
+				//		if (employeeId == item.employeeId) {
+				//			item.Edit = true;
+				//			_this.firstNameOld = item.firstName;
+				//			_this.lastNameOld = item.lastName;
+				//			_this.titleOld = item.title;
+				//		} else {
+				//			item.Edit = false;
+				//		}
+
+				//		employeeList.push(item);
+				//	}
+				//	_this.EmployeeDTOes = employeeList;
+
+				//},
+			}
+
+		};
+		var app = Vue.createApp(vueApp).mount("#app");
+	</script>
+}

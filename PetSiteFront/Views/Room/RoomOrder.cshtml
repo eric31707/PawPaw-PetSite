@@ -1,0 +1,114 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using PetSiteAPI.Models.VM;
+
+<div class="container">
+<table class="table" id="myTable">
+    <thead>
+        <tr>
+            <th scope="col">房間名稱</th>
+            <th scope="col">旅館地址</th>
+            <th scope="col">入住日期</th>
+            <th scope="col">退房日期</th>
+            <th scope="col">天數</th>
+            <th scope="col">總價</th>
+            <th scope="col">付款狀態</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+</div>
+@section Styles
+    {
+    <style>
+     
+    </style>
+    }
+
+@section Scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "https://localhost:7150/api/Rooms/GetMemberOrder",
+                type: "GET",
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (data) {
+                    $.each(data, function (index, item) {
+                        if (item.status == "未付款") {                         
+                            var row = '<tr><td>' + item.roomName + '</td><td>' + item.roomAddress + '</td><td>'
+                                + item.startDate.substring(0, 10) + '</td><td>'
+                                + item.endDate.substring(0, 10) + '</td><td>'
+                                + item.days + '</td><td>' + item.total 
+                                + `</td><td><button class="btn btn-success" id="roomorder${item.roomOrderId}" style="cursor:pointer;hover">`
+                                + "請點擊付款" + '</button></td></tr>';
+                            $('#myTable tbody').append(row);
+
+                        }
+                        else
+                        {
+                            var row = '<tr><td>' + item.roomName + '</td><td>' + item.roomAddress + '</td><td>'
+                                + item.startDate.substring(0, 10) + '</td><td>'
+                                + item.endDate.substring(0, 10) + '</td><td>'
+                                + item.days + '</td><td>' + item.total + '</td><td>' + item.status + '</td></tr>';
+                            $('#myTable tbody').append(row);
+                        }
+                        var num=item.roomOrderId
+                        $(`#roomorder${num}`).click(function () {
+                            window.location.href = `https://localhost:7180/Room/Payment?RoomOrderId=${num}`;
+                        });
+                        //$("#payment"+index).click(function(){                          
+                            //var data =
+                            //{
+                            //    RoomOrderId: item.roomOrderId,
+                            //    MemberName: item.memberName,
+                            //    MemberEmail: item.memberEmail,
+                            //    Mobile: item.mobile,
+                            //    RoomName: item.roomName,
+                            //    RoomAddress: item.roomAddress,
+                            //    RoomFee: item.roomFee,
+                            //    StartDate: item.startDate,
+                            //    EndDate: item.endDate,
+                            //    Days: item.days,
+                            //    Status: item.status,
+                            //    Total: item.total,
+                            //}
+                            //        $.ajax({
+                            //    url: 'https://localhost:7150/api/Ecpay/EricEcpay',
+                            //    method: "POST",
+                            //    contentType: 'application/json; charset=utf-8',
+                            //    data: JSON.stringify(data),
+                            //    xhrFields: {
+                            //        withCredentials: true
+                            //    },
+                            //    success: function (response) {
+                            //        const formContainer = document.createElement('div')
+                            //        formContainer.innerHTML = response
+                            //        document.body.appendChild(formContainer)
+                            //        const form = formContainer.querySelector('form')
+                            //        form.submit()
+                            //    },
+                            //    error: function (e) {
+                            //        console.log(e)
+                            //        alert("錯誤");
+                            //    }
+
+                            //});
+                        //})                                               
+                       
+                    });
+                },
+                error: function (xhr, status, error) {
+                    // 請求失敗
+                    console.log(xhr.responseText);
+                }
+            });
+        })
+    </script>
+    }

@@ -1,0 +1,96 @@
+﻿@*<div class=" container  mt-5">
+    <div class="selectplaces row row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">
+    </div>
+    <div class="blocks">
+        <div class="area">
+            <div class="img">
+                <img src="${圖片}" alt="">
+            </div>
+            <div class="content">
+                <h2 class="place">${animal_place}</h2>
+                <h3 class="kind">${動物種類}</h3>
+                <h3 class="sex">${動物性別}</h3>
+
+                <div class="descd">
+                    <!-- 縣市 -->
+                    <p class="areaId"> ${animal_area_pkid}</p>
+                    <p class="shelterId">${animal_shelter_pkid}</p>
+                    <p class="animcolor">${animal_colour}</p>
+                    <p class="bodytype">${animal_bodytype}</p>
+                    <p class="animVariety">${animal_Variety</p>
+                    <p class="add">${shelter_address}</p>
+                    <p class="shelterphone">${shelter_tel}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+<div id="app">
+    <select v-model="selectedAnimal">
+        <option v-for="animal in filteredAnimals" :value="animal">{{ animal.animal_id }} - {{ animal.animal_kind }} - {{ animal.animal_sex }}</option>
+    </select>
+</div>
+@section Scripts
+    {
+    
+    <script>
+       new Vue({
+          el: '#app',
+          data: {
+            shelters: null,
+            selectedAnimal: null,
+            filter: {
+              animal_kind: '狗',
+              animal_sex: 'M'
+            }
+          },
+  created() {
+    // 載入 JSON 檔案
+      axios.get('TransService.json')
+      .then(response => {
+       this.shelters = response.data
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  computed: {
+    filteredAnimals() {
+      if (this.shelters) {
+        // 篩選動物
+          return this.shelters.filter(animal => {
+          return animal.animal_kind === this.filter.animal_kind && animal.animal_sex === this.filter.animal_sex
+        })
+      } else {
+        return []
+      }
+    }
+  }
+})
+    </script>
+    }
+@*<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <td>shelter_address</td>
+            <td>animal_kind</td>
+            <td>animal_place</td>
+            <td>animal_colour</td>
+        </tr>
+    </thead>
+</table>*@
+@*@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+
+
+
+
+}*@
+
+
+@*@section Scripts
+    {
+    <script>
+       
+    </script>
+}*@

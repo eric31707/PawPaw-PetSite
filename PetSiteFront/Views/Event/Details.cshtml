@@ -1,0 +1,213 @@
+﻿
+@section Styles
+	{
+	<style>
+        .star::before {
+            content: "*";
+            color: red
+        }
+
+        .badge {
+            background-color: gray;
+        }
+	</style>
+}
+
+
+<div id="app" class="container">
+
+    <div class="d-flex justify-content-center row mt-5 mb-5 g-0">
+
+        <div class="card shadow-lg rounded-4 col-12 col-sm-11 col-md-10 col-lg-10 col-xl-10">
+            <!-- 頭部圖片 -->
+            <img :src="image" alt="破" class="rounded-top-4">
+
+            <!-- 身體內容 -->
+            <!-- 活動標題 -->
+            <div class="m-4">
+                <h2 class="text-center fw-bold">{{title}}</h5>
+            </div>
+
+
+            <div class="d-flex justify-content-center row mt-5 mb-5 g-0">
+                <div class="col-11 col-sm-11 col-md-10 col-lg-9 col-xl-9">
+                    <h4 class="fw-bold">活動基本資訊</h4>
+                    <hr>
+                    <!-- 活動基本資訊 -->
+                    <div class="card shadow-lg border-0 rounded-4">
+                        <div class="d-flex justify-content-center">
+                            <div class=" card-body m-3">
+                                <span>舉辦人：{{memberName}}</span>
+                                <br>
+                                <span>活動類型：{{eventsCategoryName}}</span>
+                                <br>
+                                <span>目前報名人數：{{eventApplicantsQTY}}</span>
+                                <br>
+                                <span>報名日期：{{applyTimeStart}} ~ {{applyTimeEnd}}</span>
+                                <br>
+                                <span>活動日期：{{progressTimeStart}} ~ {{progressTimeEnd}}</span>
+                                <br>
+                                <span>活動地點：{{location}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <h4 class="fw-bold mt-3">活動詳情</h4>
+                    <hr>
+                    <!-- 活動詳情 -->
+                    <div class="card shadow-lg border-0 rounded-4">
+                        <div class="d-flex justify-content-center">
+                            <div class=" card-body m-3">
+
+                                <div v-html="eventInfo"></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+            <!-- 最後的按鈕 -->
+            <div class="mb-5 d-flex justify-content-center">
+                <button id="Sumbits" class="btn btn-success w-25" disabled v-if="join">您已報名</button>
+                <button id="Sumbits" class="btn btn-success w-25" v-else data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                    立即報名
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- model 用來填寫報名人數、和寵物數量 -->
+    <div id="ttt">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">填寫報名人數、和寵物數量</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="TotalPeople" class="col-form-label">報名人數:</label>
+                            <input type="number" min="1" class="form-control" id="TotalPeople"
+                                   v-model="totalPeople">
+                        </div>
+                        <div class="mb-3">
+                            <label for="TotalPet" class="col-form-label">寵物數量:</label>
+                            <input type="number" min="1" class="form-control" id="TotalPet" v-model="totalPet">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" v-on:click="iWantJoin">確認送出</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.3/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+    <script>
+
+        var getUrlString = location.href;
+        var url = new URL(getUrlString);
+        console.log(url);
+        const eventId = url.searchParams.get('id')
+        const virtualMemberID = 2;
+
+        var webApiBaseAddr = "https://localhost:7150/";
+        var vueApp = {
+            data() {
+                return {
+                    image: "",
+                    title: "",
+                    memberName: "",
+                    eventsCategoryName: "",
+                    applyTimeStart: "",
+                    applyTimeEnd: "",
+                    progressTimeStart: "",
+                    progressTimeEnd: "",
+                    location: "",
+                    eventApplicantsQTY: "",
+                    eventInfo: "",
+                    join: false,
+                    EventDetailDTO: [],
+                    totalPeople: 1,
+                    totalPet: 1,
+                };
+            },
+            mounted: function () {
+                let _this = this;
+                _this.EventDetailDTOs();
+            },
+            methods: {
+                //拿活動資料
+                EventDetailDTOs: function () {
+                    let _this = this;
+                    axios.get(`${webApiBaseAddr}api/Events/${eventId}`,{ withCredentials: true, })
+                        .then(response => {
+                            console.log(response.data);
+                            _this.EventDetailDTO = response.data;
+                            _this.image = "/images/" +response.data[0].image;
+                            _this.title = response.data[0].title;
+                            _this.memberName = response.data[0].memberName;
+                            _this.eventsCategoryName = response.data[0].eventsCategoryName;
+                            _this.applyTimeStart = response.data[0].applyTimeStart;
+                            _this.applyTimeEnd = response.data[0].applyTimeEnd;
+                            _this.progressTimeStart = response.data[0].progressTimeStart;
+                            _this.progressTimeEnd = response.data[0].progressTimeStart;
+                            _this.location = response.data[0].location;
+                            _this.eventApplicantsQTY = response.data[0].eventApplicantsQTY;
+                            _this.eventInfo = response.data[0].eventInfo;
+                            _this.join = response.data[0].join;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                },
+                //叫出model 裡面要填寫報名人數、寵物數量
+                iWantJoin: function () {
+                    let _this = this;
+                    var request = {};
+                    request.EventId = eventId;
+                    request.TotalPeople = _this.totalPeople;
+                    request.TotalPet = _this.totalPet;
+                    if (_this.totalPeople <= 0 || _this.totalPet <= 0) {
+                        alert("請輸入大於1的數字");
+                        return;
+                    }
+                    axios.post(`${webApiBaseAddr}api/Events/event`, request, { withCredentials: true, })
+                        .then(response => {
+                            _this.EventDetailDTOs();
+                            alert(response.data);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                },
+
+
+            },
+
+
+        }
+        var app = Vue.createApp(vueApp).mount("#app");
+
+
+    </script>
+
+}
